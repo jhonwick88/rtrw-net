@@ -39,11 +39,12 @@ Route::group(['namespace' => 'Frontend'], function () {
             Route::get('/update-form','CoinController@updateForm')->name('fe.submit.update.form');
         });
         Route::get('/watchlist','WatchlistController@index')->name('fe.watchlist.index');
-       // Route::get('/portfolio','PortfolioController@index')->name('fe.portfolio.index');        
+       // Route::get('/portfolio','PortfolioController@index')->name('fe.portfolio.index');
     });
 
 });
 Route::group(['namespace' => 'Backend'], function () {
+    Route::get('/template', 'LoginController@template')->name('be.admin.template');
     Route::get('/wp-admin', 'LoginController@login')->name('be.admin.login');
     Route::group(['middleware' => 'auth','prefix' => 'admin'], function () {
         Route::get('/', 'DashboardController@index')->name('be.admin');

@@ -14,4 +14,10 @@ class LoginController extends Controller
             'appname' => 'Admin Login'
         ]);
     }
+    public function template()
+    {
+        return Inertia::render('Backend/Newtheme',[
+            'appname' => 'Admin Okree'
+        ]);
+    }
 }
