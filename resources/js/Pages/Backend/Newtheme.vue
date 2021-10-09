@@ -1,6 +1,6 @@
 <template>
  <inertia-head>
-    <title>{{ title }} - MyWebsite</title>
+    <title>{{ title }} - ok MyWebsite</title>
 </inertia-head>
     <div>
         <div class="wrapper">
