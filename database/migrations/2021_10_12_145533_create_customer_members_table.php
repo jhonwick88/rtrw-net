@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateNetworksTable extends Migration
+class CreateCustomerMembersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateNetworksTable extends Migration
      */
     public function up()
     {
-        Schema::create('networks', function (Blueprint $table) {
+        Schema::create('customer_members', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('rate_limit');
-            $table->integer('price')->nullable();
-            $table->integer('network_type')->default(1); //1.pppoe 2. voucher
+            $table->integer('extra_price')->default(0);
+            $table->foreignId('customer_id')->constrained();
+            $table->string('note')->nullable();
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ class CreateNetworksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('networks');
+        Schema::dropIfExists('customer_members');
     }
 }
