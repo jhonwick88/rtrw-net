@@ -5,13 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Network extends Model
+class Server extends Model
 {
     use HasFactory;
-    protected $fillable = [
+    protected $fillable =[
         'name',
-        'rate_limit',
-        'price',
-        'network_type',
+'location',
+'serial_number',
+'model',
+'activate_date',
+'status',
     ];
 }
