@@ -1,10 +1,5 @@
 <template>
     <app-layout :title="$page.props.appname" :isloader="isloader">
-         <template #header>
-            <h2 class="h4 font-weight-bold">
-                Settings
-            </h2>
-        </template>
         <!-- start content -->
           <div class="row justify-content-center my-5">
     <!-- <div class="col-md-12">
@@ -27,7 +22,7 @@
                                 </div>
                                 <div class="col-8 mt-2" v-if="child.type == 'color'">
                                     <div class="d-flex">
-                                        <input type="text" class="form-control" @focusin="showcolor(child)" :placeholder="child.description" :id="child.key" v-model="child.value">                              
+                                        <input type="text" class="form-control" @focusin="showcolor(child)" :placeholder="child.description" :id="child.key" v-model="child.value">
                                         <span class="badge badge-pill badge-primary p-2 ml-2 border border-primary" :style="`display: block;width:100px;background-color:${child.value}`"></span>
                                     </div>
                                 </div>
@@ -41,7 +36,7 @@
                                     </div>
                                 </div>
                                 <div class="col-8 mt-2" v-if="child.type == 'textarea'">
-                                        <textarea class="form-control" @focusout="saveSetting(child)" :placeholder="child.description" :id="child.key" v-model="child.value" rows="2"></textarea>                                        
+                                        <textarea class="form-control" @focusout="saveSetting(child)" :placeholder="child.description" :id="child.key" v-model="child.value" rows="2"></textarea>
                                         <span><small>{{child.description}}</small></span>
                                 </div>
 
@@ -122,7 +117,7 @@
           Update
         </jet-button>
       </template>
-    </jet-dialog-modal>             
+    </jet-dialog-modal>
 
           <!-- end content here -->
       <!-- </div>
@@ -132,7 +127,7 @@
     </app-layout>
 </template>
 <script>
-import AppLayout from '@/Layouts/AppLayout'
+import AppLayout from '@/Layouts/AppLayoutNet'
 import ApiManager from '../API/ApiManager'
 import BaseComponentVue from '../../Layouts/BaseComponent.vue'
 import ColorPickerInput from '@/Jetstream/ColorPickerInput'
@@ -147,7 +142,7 @@ export default {
         ColorPickerInput,
         JetDialogModal,
         JetButton,
-        
+
         // 'chrome-picker': Chrome,
        // 'popu-color-picker': colorPicker
     },
@@ -159,8 +154,8 @@ export default {
              isloader: false,
               bootstrap: null,
               childColor: null,
-           
-          
+
+
         }
     },
     created() {
@@ -180,7 +175,7 @@ export default {
         updateColor(){
           console.log('save color ')
             this.bootstrap = $('#colorModal')
-            this.bootstrap.modal('toggle')  
+            this.bootstrap.modal('toggle')
           this.saveSetting(this.childColor)
         },
         saveSetting(setting){
@@ -205,7 +200,7 @@ export default {
        console.log('showcolor')
        this.childColor = child
         this.bootstrap = $('#colorModal')
-            this.bootstrap.modal('toggle')  
+            this.bootstrap.modal('toggle')
     },
                         uploadImage(index){
             this.$refs[`myFile${index}`].click();
@@ -224,7 +219,7 @@ export default {
             ApiManager.saveImageSetting(child.id,formData).then((response) => {
                 this.isloader = false
                  if(response.data.code == 0){
-                  
+
                      this.showToast('Ads Image Updated')
                  }
             })

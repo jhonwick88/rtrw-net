@@ -1,6 +1,6 @@
 <template>
     <app-layout>
-                  <div class="card-body bg-white px-5 py-3 border-bottom rounded-top">
+    <div class="card-body bg-white px-5 py-3 border-bottom rounded-top">
           <div class="mx-3 my-3">
             <h3 class="h3 my-4">
               Coin list
@@ -17,6 +17,7 @@
     <div class="col-md-12">
       <div class="card shadow bg-light">
           <!-- content here -->
+          My Content
       </div>
     </div>
           </div>

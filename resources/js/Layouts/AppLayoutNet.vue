@@ -1,6 +1,6 @@
 <template>
- <inertia-head>
-    <title>{{ title }} - ok MyWebsite</title>
+<inertia-head>
+    <title>{{ title }} - {{$page.props.setting_new.site_name}}</title>
 </inertia-head>
     <div>
       <div class="wrapper">
@@ -17,7 +17,7 @@
             <a id="cpage" class="navbar-left" href="javascript:void(0)">Vouchers</a>
           </div>
           <div class="navbar-right">
-            <a id="logout" href="./?hotspot=logout&amp;session=PINTARMEDIA">
+            <a id="logout" href="javascript:void(0)" @click="logout">
               <i class="fa fa-sign-out mr-1"></i> Logout </a>
             <select class="stheme ses text-right mr-t-10 pd-5">
               <option> Theme</option>
@@ -55,8 +55,9 @@
             <i class=" fa fa-gear"></i> Pelanggan <i class="fa fa-caret-down"></i> &nbsp;
           </div>
           <div class="dropdown-container ">
-            <a href="./?system=scheduler&amp;session=PINTARMEDIA" class="">
-              <i class="fa fa-clock-o "></i> Daftar Pelanggan </a>
+               <jet-nav-link :href="route('be.admin.customers-list')" :active="route().current('be.admin.customers-list')" :ismenu="false">
+            <i class="fa fa-clock-o "></i> Daftar Pelanggan
+            </jet-nav-link>
             <a href="./admin.php?id=reboot&amp;session=PINTARMEDIA" class="">
               <i class="fa fa-power-off "></i> Tambah Pelanggan </a>
           </div>
@@ -101,52 +102,87 @@
             </div>
           </div>
           <!--settings-->
-          <a href="./?hotspot=about&amp;session=PINTARMEDIA" class="menu ">
-            <i class="fa fa-gear"></i> Setting </a>
+           <jet-nav-link :href="route('be.admin.setting')" :active="route().current('be.admin.setting')">
+              <i class="fa fa-gear"></i> Settings
+            </jet-nav-link>
+
           <!--about-->
-          <a href="./?hotspot=about&amp;session=PINTARMEDIA" class="menu ">
-            <i class="fa fa-info-circle"></i> About </a>
+          <jet-nav-link :href="route('be.admin.about')" :active="route().current('be.admin.about')">
+            <i class="fa fa-info-circle"></i> About
+            </jet-nav-link>
         </div>
         <!-- end sidenav -->
         <!-- main -->
         <div id="main">
-          <div id="loading" class="lds-dual-ring" style="display: none;"></div>
+            <loader v-if="isloader" object="#ff9633" color1="#ffffff" color2="#17fd3d" size="5" speed="2" bg="#343a40" objectbg="#999793" opacity="80" disableScrolling="false" name="box"></loader>
+          <!-- <div id="loading" class="lds-dual-ring" style="display: none;"></div> -->
           <div class="main-container" style="">
-            <div class="row">
-              <div class="col-12">
-                <div class="card">
-                  <div class="card-header">
-                    <h3>
-                      <i class=" fa fa-users"></i> Vouchers &nbsp;&nbsp; | &nbsp;&nbsp; <i onclick="location.reload();" class="fa fa-refresh pointer" title="Reload data"></i>
-                    </h3>
-                  </div>
-                  <div class="card-body">
-                    <div class="overflow" style="max-height: 80vh">
-                      <!-- content -->
-                      <!-- end content -->
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+                <slot :setting="setting"></slot>
           </div>
         </div>
         <!-- end main -->
       </div>
     </div>
 </template>
+
 <script>
-//import BaseComponentVue from './BaseComponent.vue'
+import BaseComponentVue from './BaseComponent.vue'
+import JetNavLink from '@/Jetstream/NavLink'
+import { usePage } from '@inertiajs/inertia-vue3'
 export default {
-      //extends: BaseComponentVue,
+  extends: BaseComponentVue,
      props: {
     title: String,
     isloader: Boolean,
   },
-      created() {
-          let insertMainCss = document.createElement("script");
+  components: {
+      JetNavLink,
+  },
+
+  data() {
+    return {
+      form: {
+        tokenId: 40,
+      },
+      setting:{},
+      showingNavigationDropdown: false,
+    }
+  },
+    created() {
+           let insertMainCss = document.createElement("script");
     insertMainCss.setAttribute("src", "/js/mikhmon-ui.dark.min.js");
     document.head.appendChild(insertMainCss);
-}
+       this.resultConfig(usePage().props.value.settings)
+
+  },
+  methods: {
+    switchToTeam(team) {
+      this.$inertia.put(route('current-team.update'), {
+        'team_id': team.id
+      }, {
+        preserveState: false
+      })
+    },
+     resultConfig: function(data){
+          const result = data.reduce(
+              (accumulator, target) => ({ ...accumulator, [target.key]: target.value }),
+              {});
+              let site_names = result.site_name.split(" ")
+              this.setting = Object.assign(result,{'site_1': site_names[0],'site_2': site_names[1]})
+             //console.log('Settings '+JSON.stringify(this.setting))
+      },
+
+    logout() {
+      //console.log("testtt")
+       this.$inertia.post(route('logout'));
+    },
+  },
+
+  computed: {
+    path() {
+      return window.location.pathname
+    }
+  }
 }
 </script>
+>

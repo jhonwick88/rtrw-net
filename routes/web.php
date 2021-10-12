@@ -19,18 +19,18 @@ Route::post('/loginstore','Frontend\LoginController@store')->name('login.auth.po
 
 Route::group(['namespace' => 'Frontend'], function () {
     Route::get('/','LandingpageController@snipper')->name('home.index');
-    Route::get('/contact','LandingpageController@contact')->name('home.contact');
-    Route::get('/about','LandingpageController@about')->name('home.about');
-    Route::group(['prefix' => 'coin'], function () {
-        Route::get('/','CoinController@filter')->name('fe.coin.filter');
-        Route::get('/search','CoinController@search')->name('fe.coin.search');
-        Route::get('/watchlist/{public_id}','WatchlistController@most')->name('fe.watchlist.most');
-        Route::get('/filter/{filter?}','CoinController@filter')->name('fe.coin.filter');
-        Route::get('/{slug?}','CoinController@detail')->name('fe.coin.detail');
+    // Route::get('/contact','LandingpageController@contact')->name('home.contact');
+    // Route::get('/about','LandingpageController@about')->name('home.about');
+    // Route::group(['prefix' => 'coin'], function () {
+    //     Route::get('/','CoinController@filter')->name('fe.coin.filter');
+    //     Route::get('/search','CoinController@search')->name('fe.coin.search');
+    //     Route::get('/watchlist/{public_id}','WatchlistController@most')->name('fe.watchlist.most');
+    //     Route::get('/filter/{filter?}','CoinController@filter')->name('fe.coin.filter');
+    //     Route::get('/{slug?}','CoinController@detail')->name('fe.coin.detail');
         //Route::post('store','WatchlistController@store')->name('api.watchlist.store');
        // Route::put('update/{id}','CoinController@update')->name('api.coin.update');
         //Route::delete('destroy/{watchlist}','WatchlistController@destroy')->name('api.watchlist.destroy');
-    });
+    //});
     Route::post('/loginlogout','LoginController@logout')->name('login.auth.logout');
     Route::group(['middleware'=>['auth:sanctum']], function () {
         //Route::get('/dashboard', 'LandingpageController@restorant');
@@ -49,11 +49,15 @@ Route::group(['namespace' => 'Backend'], function () {
     Route::group(['middleware' => 'auth','prefix' => 'admin'], function () {
         Route::get('/', 'DashboardController@index')->name('be.admin');
         Route::get('/dashboard', 'DashboardController@index')->name('be.admin.dashboard');
+        Route::get('/customers-list', 'CustomerController@index')->name('be.admin.customers-list');
+        Route::get('/settings', 'SettingController@index')->name('be.admin.setting');
+        Route::get('/about', 'DashboardController@about')->name('be.admin.about');
+        Route::get('/users', 'UserController@index')->name('be.admin.user');
+        // trash
         Route::get('/coins', 'CoinController@index')->name('be.admin.coin');
         Route::get('/watchlist', 'WatchlistController@index')->name('be.admin.watchlist');
-        Route::get('/users', 'UserController@index')->name('be.admin.user');
         Route::get('/ads', 'AdsController@index')->name('be.admin.ads');
-        Route::get('/settings', 'SettingController@index')->name('be.admin.setting');
+
     });
 });
 

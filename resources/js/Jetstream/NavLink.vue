@@ -1,20 +1,35 @@
 <template>
-  <li class="nav-item">
     <inertia-link :href="href" :class="classes">
       <slot></slot>
     </inertia-link>
-  </li>
 </template>
 
 <script>
   export default {
-    props: ['href', 'active'],
+    props: {
+        href: {
+        type: String,
+      },
+      active: {
+        type: Boolean,
+      },
+          ismenu: {
+        type: Boolean,
+        default: false,
+      }
+      },
 
     computed: {
       classes() {
-        return this.active
-            ? 'nav-link active font-weight-bolder'
-            : 'nav-link'
+          if (this.ismenu){
+            return this.active
+                ? 'menu active'
+                : 'menu'
+          }else{
+            return this.active
+                ? 'active'
+                : ''
+          }
       }
     }
   }

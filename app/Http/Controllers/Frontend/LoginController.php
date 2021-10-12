@@ -27,7 +27,7 @@ class LoginController extends Controller
       if (Auth::attempt($credentials)) {
         //   $nm = $user->createToken('snipperToken');
         //   $tokenId = $nm->accessToken->id;
-        //   $token = $nm->plainTextToken;        
+        //   $token = $nm->plainTextToken;
         if($user->public_link == null){
             $public_link = \Illuminate\Support\Str::random(12);
             $user->public_link = $public_link;
@@ -35,7 +35,7 @@ class LoginController extends Controller
         }
         if($request->redirect_url!=null){
             return redirect($request->redirect_url);
-            }  
+            }
           return Redirect::route('home.index');//->withFlash(['tokenId'=>$tokenId,'token'=>$token]);
       }
       return redirect('login');

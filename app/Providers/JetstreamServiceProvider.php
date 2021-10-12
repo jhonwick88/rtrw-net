@@ -51,7 +51,7 @@ class JetstreamServiceProvider extends ServiceProvider
 
         Fortify::loginView(function (Request $request) {
             //return Inertia::render('Auth/LoginPage');
-            return inertia("Auth/LoginPage")->toResponse($request);
+            return inertia("Auth/LoginNet")->toResponse($request);
         });
         Fortify::registerView(function () {
             return Inertia::render('Auth/RegisterPage');

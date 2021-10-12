@@ -10,7 +10,7 @@ class LoginController extends Controller
 {
     public function login()
     {
-        return Inertia::render('Auth/Login',[
+        return Inertia::render('Auth/LoginNet',[
             'appname' => 'Admin Login'
         ]);
     }

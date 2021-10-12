@@ -17,5 +17,12 @@ class DashboardController extends Controller
             'appname' => 'Admin Dashboard'
         ]);
     }
-    
+    public function about()
+    {
+        abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        return Inertia::render('Backend/About',[
+            'appname' => 'Admin About'
+        ]);
+    }
+
 }
