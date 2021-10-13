@@ -4,7 +4,7 @@ namespace App\Http\Requests\Api;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AddNetworkRequest extends FormRequest
+class AddPaymentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,10 +24,13 @@ class AddNetworkRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'rate_limit' => 'required',
-            'price' => ['required','integer'],
-            'network_type' => 'required',
+            'month' => ['required'],
+            'pay_date' => ['required'],
+            'total' => ['required','integer'],
+            'user_id' => ['required','integer'],
+            'payment_method_id' => ['required','integer'],
+            'customer_id' => ['required','integer'],
+            'status' => ['required'],
         ];
     }
 }

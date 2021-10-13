@@ -4,7 +4,7 @@ namespace App\Http\Requests\Api;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AddNetworkRequest extends FormRequest
+class AddServerRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,10 +24,12 @@ class AddNetworkRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'rate_limit' => 'required',
-            'price' => ['required','integer'],
-            'network_type' => 'required',
+            'name' => ['required'],
+            'location' => ['required'],
+            'serial_number' => ['sometimes'],
+            'model' => ['sometimes'],
+            'activate_date' => ['sometimes'],
+            'status' => ['sometimes']
         ];
     }
 }
