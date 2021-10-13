@@ -65,13 +65,15 @@
           <div class="dropdown-btn">
             <i class="fa fa-wifi"></i> Sistem <i class="fa fa-caret-down"></i>
           </div>
-          <div class="dropdown-container">
+          <div class="dropdown-container menu-open">
             <!--users-->
-            <div class="dropdown-btn">
+            <div class="dropdown-btn active">
               <i class="fa fa-users"></i> Users <i class="fa fa-caret-down"></i>
             </div>
-            <div class="dropdown-container ">
-              <a href="./?hotspot=users&amp;profile=all&amp;session=PINTARMEDIA" class=""> &nbsp;&nbsp;&nbsp; <i class="fa fa-list "></i> User List </a>
+            <div class="dropdown-container menu-open">
+                <jet-nav-link :href="route('be.admin.user')" :active="route().current('be.admin.user')" :ismenu="false">
+                <i class="fa fa-list "></i> User List
+                </jet-nav-link>
               <a href="./?hotspot-user=add&amp;session=PINTARMEDIA" class=""> &nbsp;&nbsp;&nbsp; <i class="fa fa-user-plus "></i> Add User </a>
             </div>
             <!-- server -->

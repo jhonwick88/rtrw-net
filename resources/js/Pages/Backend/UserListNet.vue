@@ -1,65 +1,44 @@
 <template>
-    <app-layout :title="$page.props.appname">
-        <!-- start content -->
-          <div class="row justify-content-center my-5">
-    <div class="col-md-12">
-      <div class="card shadow bg-light">
-          <!-- head -->
-                  <div class="card-body bg-white px-5 pt-3 pb-0 border-bottom rounded-topp">
-          <div class="mx-3 mt-3">
-            <div class="d-flex justify-content-between">
-            <h3 class="h3 my-4">
-              User list
-            </h3>
-            <!-- start search -->
-             <div class="searchbar">
-          <input class="search_input" type="text" v-model="query" placeholder="Search...">
-          <a href="#" class="search_icon"><i class='bx bx-loader bx-spin' v-if="isloading"></i><i class="fas fa-search" v-else></i></a>
-        </div>
-            <!-- end search -->
-            </div>
+    <app-layout>
+<div class="row">
+<div class="col-12">
+<div class="card">
+    <div class="card-header">
+	<h3><i class=" fa fa-money"></i> Users <small id="loader" style="display: none;"><i><i class="fa fa-circle-o-notch fa-spin"></i> Processing... </i></small></h3>
+</div>
+<div class="card-body">
+     <!-- content here -->
+<!-- header table -->
+<div class="row">
+<div class="col-12 mr-b-10">
+    		<div style="padding-bottom: 5px; padding-top: 5px;">
+                 <input type="text" class="form-control" v-model="query" placeholder="Search..." style="float:left; margin-top: 6px; max-width: 150px;">
+                 <button name="help" class="btn bg-primary" onclick="location.href='#help';" title="Help"><i class="fa fa-question"></i> Help</button>
+		</div>
 
-            <div class="text-muted mb-3">
-             Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos vel, eum consectetur dolor doloribus incidunt labore. Totam harum iste non libero nemo pariatur voluptates possimus neque. Itaque voluptate dignissimos pariatur.
-            </div>
-            <!-- pagination -->
-            <div class="d-flex justify-content-center p-2">
-                    <nav aria-label="Page navigation example" v-if="filterData.last_page > 1">
-  <ul class="pagination">
-    <li class="page-item" v-for="(item, i) in filterData.links" :key="i">
-        <a class="page-link" href="javascript:" aria-label="Previous" v-if="i == 0">
-        <span aria-hidden="true">&laquo;</span>
-      </a>
-      <a class="page-link" href="javascript:" aria-label="Next" v-else-if="i == filterData.links.length - 1">
-        <span aria-hidden="true">&raquo;</span>
-      </a>
-       <a class="page-link" href="javascript:" @click="getPage(item.label)" v-else>{{item.label}}</a>
-   </li>
-  </ul>
-</nav>
-            </div>
-                    <!-- end pagination -->
-          </div>
-        </div>
-          <!-- end head -->
-          <!-- content here -->
-          <table class="table table-hover" v-if="filterData.data.length > 0">
-  <thead class="thead-dark">
-    <tr>
-      <th scope="col">#</th>
-        <th scope="col">Name</th>
-        <th scope="col">Email</th>
-        <th scope="col">Roles</th>
-       <th scope="col" class="text-center">
-            Active
-        </th>
-        <th scope="col" class="text-center">
-            Options
-        </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr v-for="(item,index) in filterData.data" :key="index">
+</div>
+</div>
+<!-- end header table -->
+<!-- start table -->
+		  <div class="overflow box-bordered" style="max-height: 70vh">
+			<table id="dataTable" class="table table-bordered table-hover text-nowrap">
+				<thead class="thead-light">
+				<tr>
+				  <th colspan="4">Users oct 2021<b style="font-size:0;">,,,,</b></th>
+				  <th style="text-align:right;">Total</th>
+				  <th style="text-align:right;" id="total">Rp 0</th>
+				</tr>
+				<tr>
+				  <th>№</th>
+					<th>Name</th>
+					<th>Email</th>
+					<th>Roles</th>
+					<th>Active</th>
+					<th>Options</th>
+				</tr>
+				</thead>
+				<tbody>
+                    <tr v-for="(item,index) in filterData.data" :key="index">
       <th scope="row">
           {{ filterData.from+index }}
       </th>
@@ -84,48 +63,41 @@
 </div>
             </div></td>
     </tr>
-  </tbody>
-</table>
-          <!-- end content -->
-      </div>
-    </div>
-          </div>
-                        <jet-confirmation-modal id="confirmModalAction">
-      <template #title>
-        {{ action.title }}
-      </template>
+				</tbody>
+			</table>
+		</div>
+<!-- end table -->
+    <!-- end content -->
+</div>
+</div>
+<!-- modal -->
+<div class="modal-window" id="help" aria-hidden="true">
+  <div>
+  	<header><h1>Header Modal</h1></header>
+  	<a style="font-weight:bold;" href="#" title="Close" class="modal-close">X</a>
+    <p>OK Modal</p>
+  </div>
+</div>
+<!-- end modal -->
+</div>
+</div>
 
-      <template #content>
-        {{ action.message }}
-      </template>
-
-      <template #footer>
-        <jet-secondary-button @click="itemToChange = null" data-dismiss="modal">
-          Cancel
-        </jet-secondary-button>
-
-        <jet-danger-button class="ml-2" @click="updateUserAction">
-          Confirm
-        </jet-danger-button>
-      </template>
-    </jet-confirmation-modal>
-          <!-- end content -->
     </app-layout>
 </template>
 <script>
 import AppLayout from '@/Layouts/AppLayoutNet'
 import ApiManager from '../API/ApiManager'
-import JetConfirmationModal from '@/Jetstream/ConfirmationModal'
-import JetDangerButton from '@/Jetstream/DangerButton'
-import JetSecondaryButton from '@/Jetstream/SecondaryButton'
+// import JetConfirmationModal from '@/Jetstream/ConfirmationModal'
+// import JetDangerButton from '@/Jetstream/DangerButton'
+// import JetSecondaryButton from '@/Jetstream/SecondaryButton'
 import BaseComponentVue from '../../Layouts/BaseComponent.vue'
 export default {
     extends: BaseComponentVue,
     components: {
         AppLayout,
-        JetConfirmationModal,
-JetDangerButton,
-JetSecondaryButton,
+//         JetConfirmationModal,
+// JetDangerButton,
+// JetSecondaryButton,
     },
     data(){
         return{
@@ -261,47 +233,3 @@ JetSecondaryButton,
     }
 }
 </script>
-<style scoped>
- .searchbar{
-    margin-bottom: auto;
-    margin-top: auto;
-    height: 60px;
-    background-color: #353b48;
-    border-radius: 30px;
-    padding: 10px;
-    }
-
-    .search_input{
-    color: white;
-    border: 0;
-    outline: 0;
-    background: none;
-    width: 0;
-    caret-color:transparent;
-    line-height: 40px;
-    transition: width 0.4s linear;
-    }
-
-    .searchbar:hover > .search_input{
-    padding: 0 10px;
-    width: 450px;
-    caret-color:red;
-    transition: width 0.4s linear;
-    }
-
-    .searchbar:hover > .search_icon{
-    background: white;
-    color: #e74c3c;
-    }
-    .search_icon{
-    height: 40px;
-    width: 40px;
-    float: right;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-    color:white;
-    text-decoration:none;
-    }
-</style>
