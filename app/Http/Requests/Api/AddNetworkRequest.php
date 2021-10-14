@@ -27,7 +27,7 @@ class AddNetworkRequest extends FormRequest
             'name' => 'required',
             'rate_limit' => 'required',
             'price' => ['required','integer'],
-            'network_type' => 'required',
+            'network_type' => ['required','integer'],
         ];
     }
 }

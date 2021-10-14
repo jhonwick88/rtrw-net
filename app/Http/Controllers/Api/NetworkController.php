@@ -30,9 +30,9 @@ class NetworkController extends BaseApiController
     {
         $data = new Network();
         $data->name = $request->name;
-        $data->sort_name = $request->sort_name;
-        $data->description = $request->description ?? '';
-
+        $data->rate_limit = $request->rate_limit;
+        $data->price = $request->price;
+        $data->network_type = $request->network_type;
         $data->saveOrFail();
 
         return $this->successResponse($data);
@@ -42,8 +42,9 @@ class NetworkController extends BaseApiController
     {
         $data = Network::find($id);
         $data->name = $request->name;
-        $data->sort_name = $request->sort_name;
-        $data->description = $request->description ?? '';
+        $data->rate_limit = $request->rate_limit;
+        $data->price = $request->price;
+        $data->network_type = $request->network_type;
         $data->saveOrFail();
         $data->refresh();
         return $this->successResponse($data);
