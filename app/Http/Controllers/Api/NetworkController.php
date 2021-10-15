@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\BaseApiController;
 use Illuminate\Http\Request;
 use App\Http\Requests\Api\AddNetworkRequest;
+use App\Http\Requests\Api\UpdateNetworkRequest;
 use App\Models\Network;
 
 class NetworkController extends BaseApiController
@@ -38,7 +39,7 @@ class NetworkController extends BaseApiController
         return $this->successResponse($data);
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateNetworkRequest $request, $id)
     {
         $data = Network::find($id);
         $data->name = $request->name;
