@@ -10,6 +10,7 @@ class CustomerMember extends Model
     use HasFactory;
     protected $fillable = [
         'name',
+        'password',
         'extra_price',
         'customer_id',
         'note',
