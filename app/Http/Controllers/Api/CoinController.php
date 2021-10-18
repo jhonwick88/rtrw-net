@@ -36,7 +36,7 @@ class CoinController extends BaseApiController
         }
         return $this->successResponse($data);
     }
-    
+
     public function store(AddCoinRequest $request)
     {
         $data = new Coin();
@@ -47,7 +47,7 @@ class CoinController extends BaseApiController
         $data->contract_address = $request->contract_address;
         $data->website_link = $request->website_link;
         $data->description = $request->description;
-        $data->ispresale = $request->ispresale;        
+        $data->ispresale = $request->ispresale;
         $data->presale_link = $request->presale_link;
         $data->cart_link = $request->cart_link;
         $data->swap_link = $request->swap_link;
@@ -76,7 +76,7 @@ class CoinController extends BaseApiController
         $data->contract_address = $request->contract_address;
         $data->website_link = $request->website_link;
         $data->description = $request->description;
-        $data->ispresale = $request->ispresale;        
+        $data->ispresale = $request->ispresale;
         $data->presale_link = $request->presale_link;
         $data->cart_link = $request->cart_link;
         $data->swap_link = $request->swap_link;
@@ -120,16 +120,16 @@ class CoinController extends BaseApiController
                 case 'today': $query->whereDate('launch_at', '=', Carbon::today()->toDateString()); break;
                 case 'alltime': $query->orderBy('created_at','desc'); break;
                 case 'new': $query->orderBy('launch_at','desc'); break;
-                case 'marketcap': 
+                case 'marketcap':
                     $query->where('ispresale',0);
-                    $query->orderBy('launch_at','desc'); 
+                    $query->orderBy('launch_at','desc');
                     break;
                 case 'presales':
                     $query->where('ispresale',1);
-                    $query->orderBy('launch_at','desc'); 
+                    $query->orderBy('launch_at','desc');
                     break;
             }
-            
+
         }
         if ($request->has('pr')){
             $query->where('ispromoted', true);
@@ -165,6 +165,6 @@ class CoinController extends BaseApiController
             return $this->successResponse([],null,'Thanks you for your votes');
         }
         return $this->successResponse([],null,'You can vote once every 24 hours only');
-        
+
     }
 }
