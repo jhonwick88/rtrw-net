@@ -24,36 +24,51 @@ Route::group(['middleware'=>['auth:sanctum'],'namespace' => 'Api'], function () 
         Route::delete('destroy/{id}','UserController@destroy')->name('api.user.destroy');
     });
     Route::post('/logout', 'AuthController@logout')->name('api.auth.logout');
-    //Coin
-    Route::group(['prefix' => 'coin'], function () {
-        Route::get('index','CoinController@index')->name('api.coin.index')->withoutMiddleware('auth:sanctum');
-        Route::post('store','CoinController@store')->name('api.coin.store');
-        Route::post('vote','CoinController@addVotes')->name('api.coin.vote');
-        Route::put('update/{id}','CoinController@update')->name('api.coin.update');
-        Route::delete('destroy/{id}','CoinController@destroy')->name('api.coin.destroy');
+    //Customer
+    Route::group(['prefix' => 'customer'], function () {
+        Route::get('index','CustomerController@index')->name('api.customer.index');//->withoutMiddleware('auth:sanctum');
+        Route::post('store','CustomerController@store')->name('api.customer.store');
+       // Route::post('vote','CustomerController@addVotes')->name('api.customer.vote');
+        Route::put('update/{id}','CustomerController@update')->name('api.customer.update');
+        Route::delete('destroy/{id}','CustomerController@destroy')->name('api.customer.destroy');
     });
-    //Watchlist
-    Route::group(['prefix' => 'watchlist'], function () {
-        Route::get('index','WatchlistController@index')->name('api.watchlist.index');
-        Route::post('store','WatchlistController@store')->name('api.watchlist.store');
-       // Route::put('update/{id}','CoinController@update')->name('api.coin.update');
-       Route::delete('destroy/{watchlist}','WatchlistController@destroy')->name('api.watchlist.destroy');
-       Route::delete('delete/{id}','WatchlistController@delete')->name('api.watchlist.delete');
+    //CustomerMember
+    Route::group(['prefix' => 'customer-member'], function () {
+        Route::get('index','CustomerMemberController@index')->name('api.customer.member.index');
+        Route::post('store','CustomerMemberController@store')->name('api.customer.member.store');
+        Route::put('update/{id}','CustomerMemberController@update')->name('api.customer.member.update');
+        Route::delete('destroy/{id}','CustomerMemberController@destroy')->name('api.customer.member.destroy');
+    });
+    //Server
+    Route::group(['prefix' => 'server'], function () {
+        Route::get('index','ServerController@index')->name('api.server.index');
+        Route::post('store','ServerController@store')->name('api.server.store');
+        Route::put('update/{id}','ServerController@update')->name('api.server.update');
+       Route::delete('destroy/{id}','ServerController@destroy')->name('api.server.destroy');
+      // Route::delete('delete/{id}','ServerController@delete')->name('api.server.delete');
     });
     //Network
     Route::group(['prefix' => 'network'], function () {
         Route::get('index','NetworkController@index')->name('api.network.index');
-        Route::post('store','NetworkController@store')->name('api.network.store');
+        Route::post('store','NetworkController@store')->name('api.network.store')->withoutMiddleware('auth:sanctum');
         Route::put('update/{id}','NetworkController@update')->name('api.network.update');
         Route::delete('destroy/{id}','NetworkController@destroy')->name('api.network.destroy');
     });
-    //Ads
-    Route::group(['prefix' => 'ads'], function () {
-        Route::get('index','AdsController@index')->name('api.ads.index');
-        Route::post('store','AdsController@store')->name('api.ads.store');
-        Route::put('update/{id}','AdsController@update')->name('api.ads.update');
-        Route::put('update-active/{id}','AdsController@updateActive')->name('api.ads.updateactive');
-        Route::delete('destroy/{id}','AdsController@destroy')->name('api.ads.destroy');
+    //Payment
+    Route::group(['prefix' => 'payment'], function () {
+        Route::get('index','PaymentController@index')->name('api.payment.index');
+        Route::post('store','PaymentController@store')->name('api.payment.store');
+        Route::put('update/{id}','PaymentController@update')->name('api.payment.update');
+        //Route::put('update-active/{id}','PaymentController@updateActive')->name('api.payment.updateactive');
+        Route::delete('destroy/{id}','PaymentController@destroy')->name('api.payment.destroy');
+    });
+    //PaymentMethod
+    Route::group(['prefix' => 'payment-method'], function () {
+        Route::get('index','PaymentMethodController@index')->name('api.payment.method.index');
+        Route::post('store','PaymentMethodController@store')->name('api.payment.method.store');
+        Route::put('update/{id}','PaymentMethodController@update')->name('api.payment.method.update');
+        //Route::put('update-active/{id}','PaymentMethodController@updateActive')->name('api.payment.method.updateactive');
+        Route::delete('destroy/{id}','PaymentMethodController@destroy')->name('api.payment.method.destroy');
     });
     //Setting
     Route::group(['prefix' => 'setting'], function () {
@@ -63,6 +78,4 @@ Route::group(['middleware'=>['auth:sanctum'],'namespace' => 'Api'], function () 
        // Route::delete('destroy/{id}','SettingController@destroy')->name('api.v1.setting.destroy');
     });
 });
-Route::get('/data', function (){
-    return User::all();
-});
+

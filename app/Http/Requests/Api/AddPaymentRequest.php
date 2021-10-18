@@ -25,9 +25,10 @@ class AddPaymentRequest extends FormRequest
     {
         return [
             'month' => ['required'],
+            'year' => ['required'],
             'pay_date' => ['required'],
             'total' => ['required','integer'],
-            'user_id' => ['required','integer'],
+           // 'user_id' => ['required','integer'],
             'payment_method_id' => ['required','integer'],
             'customer_id' => ['required','integer'],
             'status' => ['required'],

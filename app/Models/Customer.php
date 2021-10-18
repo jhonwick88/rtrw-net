@@ -14,9 +14,7 @@ class Customer extends Model
         'adress',
         'phone',
         'photo',
-        'extra_price',
         'discount',
-        'shared_user',
         'server_id',
         'network_id',
         'status',
@@ -26,6 +24,10 @@ class Customer extends Model
     public function customerMember()
     {
         return $this->hasMany(CustomerMember::class);
+    }
+    public function payment()
+    {
+        return $this->hasMany(Payment::class);
     }
     public function network()
     {
