@@ -27,7 +27,7 @@ class AddPaymentMethodRequest extends FormRequest
             'name'  => ['required'],
             'account_number'  => ['sometimes'],
             'description'  => ['sometimes'],
-            'status'  => ['sometimes'],
+            'status'  => ['required'],
         ];
     }
 }
