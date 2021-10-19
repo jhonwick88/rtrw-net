@@ -38,15 +38,15 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request)
     {
-        $ads_home = Ads::query()->ads(1)->inRandomOrder()->get();
-        $ads_detail = Ads::query()->ads(2)->inRandomOrder()->get();
-        $ads_default = Ads::query()->ads(3)->inRandomOrder()->get(); //default ads
-        if(count($ads_home) == 0){
-            $ads_home = $ads_default;
-        }
-        if(count($ads_detail) == 0){
-            $ads_detail = $ads_default;
-        }
+        // $ads_home = Ads::query()->ads(1)->inRandomOrder()->get();
+        // $ads_detail = Ads::query()->ads(2)->inRandomOrder()->get();
+        // $ads_default = Ads::query()->ads(3)->inRandomOrder()->get(); //default ads
+        // if(count($ads_home) == 0){
+        //     $ads_home = $ads_default;
+        // }
+        // if(count($ads_detail) == 0){
+        //     $ads_detail = $ads_default;
+        // }
         //$ads_home = $query->where('ads_type', 1)->get();
         //$ads_home = $query->get();
         //$ads_detail = '';
@@ -62,10 +62,10 @@ class HandleInertiaRequests extends Middleware
         $data = collect($settings);
         $data = $data->mapWithKeys(function($item, $key) {
             return [$item->key => $item->value];
-        });     
+        });
         return array_merge(parent::share($request), [
-            'ads_home' => $ads_home,
-            'ads_detail' => $ads_detail,
+            // 'ads_home' => $ads_home,
+            // 'ads_detail' => $ads_detail,
             'settings' => $settings,
             'setting_new' => $data,
         ]);

@@ -34,11 +34,11 @@ Route::group(['namespace' => 'Frontend'], function () {
     Route::post('/loginlogout','LoginController@logout')->name('login.auth.logout');
     Route::group(['middleware'=>['auth:sanctum']], function () {
         //Route::get('/dashboard', 'LandingpageController@restorant');
-        Route::group(['prefix' => 'submit'], function () {
-            Route::get('/coin','CoinController@submit')->name('fe.submit.coin');
-            Route::get('/update-form','CoinController@updateForm')->name('fe.submit.update.form');
-        });
-        Route::get('/watchlist','WatchlistController@index')->name('fe.watchlist.index');
+        // Route::group(['prefix' => 'submit'], function () {
+        //     Route::get('/coin','CoinController@submit')->name('fe.submit.coin');
+        //     Route::get('/update-form','CoinController@updateForm')->name('fe.submit.update.form');
+        // });
+        // Route::get('/watchlist','WatchlistController@index')->name('fe.watchlist.index');
        // Route::get('/portfolio','PortfolioController@index')->name('fe.portfolio.index');
     });
 
@@ -52,7 +52,10 @@ Route::group(['namespace' => 'Backend'], function () {
         Route::get('/customers-list', 'CustomerController@index')->name('be.admin.customers-list');
         Route::get('/settings', 'SettingController@index')->name('be.admin.setting');
         Route::get('/about', 'DashboardController@about')->name('be.admin.about');
+        //User
         Route::get('/users', 'UserController@index')->name('be.admin.user');
+        Route::get('/user-create', 'UserController@create')->name('be.admin.user.create');
+
         // trash
         Route::get('/coins', 'CoinController@index')->name('be.admin.coin');
         Route::get('/watchlist', 'WatchlistController@index')->name('be.admin.watchlist');
