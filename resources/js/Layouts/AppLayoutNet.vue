@@ -14,7 +14,7 @@
             <a id="closeNav" class="navbar-hover" href="javascript:void(0)">
               <i class="fa fa-bars"></i>
             </a>
-            <a id="cpage" class="navbar-left" href="javascript:void(0)">Vouchers</a>
+            <a id="cpage" class="navbar-left" href="javascript:void(0)">{{ title }}</a>
           </div>
           <div class="navbar-right">
             <a id="logout" href="javascript:void(0)" @click="logout">
@@ -74,7 +74,10 @@
                 <jet-nav-link :href="route('be.admin.user')" :active="route().current('be.admin.user')" :ismenu="false">
                 <i class="fa fa-list "></i> User List
                 </jet-nav-link>
-              <a href="./?hotspot-user=add&amp;session=PINTARMEDIA" class=""> &nbsp;&nbsp;&nbsp; <i class="fa fa-user-plus "></i> Add User </a>
+                <jet-nav-link :href="route('be.admin.user.create')" :active="route().current('be.admin.user.create')" :ismenu="false">
+                <i class="fa fa-user-plus "></i> Add user
+                </jet-nav-link>
+
             </div>
             <!-- server -->
             <div class="dropdown-btn">
@@ -153,7 +156,11 @@ export default {
     created() {
            let insertMainCss = document.createElement("script");
     insertMainCss.setAttribute("src", "/js/mikhmon-ui.dark.min.js");
+     let insertMainCss2 = document.createElement("script");
+    insertMainCss2.setAttribute("src", "/js/mikhmon.js");
+
     document.head.appendChild(insertMainCss);
+    document.head.appendChild(insertMainCss2);
        this.resultConfig(usePage().props.value.settings)
 
   },
