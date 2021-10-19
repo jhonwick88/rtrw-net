@@ -15,7 +15,12 @@ class UserController extends Controller
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         return Inertia::render('Backend/UserListNet',[
-            'appname' => 'Admin UserList'
+            'appname' => 'Daftar Pengguna'
+        ]);
+    }
+    public function create(){
+        return Inertia::render('Backend/UserCreate',[
+            'appname' => 'Form Tambah Pengguna',
         ]);
     }
 

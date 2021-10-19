@@ -18,7 +18,7 @@ use Carbon\Carbon;
 class UserController extends BaseApiController
 {
     use UploadFileHelper;
-    
+
     public function index(Request $request)
     {
         $query = $this->baseQuery($request);
@@ -34,10 +34,10 @@ class UserController extends BaseApiController
         }
         return $this->successResponse($data);
     }
-    
+
     // public function store(AddCoinRequest $request)
     // {
-    //     $data = new Coin();
+    //     $data = new User();
     //     $data->name = $request->name;
     //     $data->symbol = $request->symbol;
     //     $data->network_id = $request->network_id;
@@ -61,7 +61,7 @@ class UserController extends BaseApiController
         if ($request->has('roles')) {
             $data->roles()->sync($request->roles);
         }
-        
+
         $data->saveOrFail();
         $data->refresh();
         $data->load('roles');

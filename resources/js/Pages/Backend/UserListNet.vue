@@ -1,10 +1,14 @@
 <template>
-    <app-layout>
+<app-layout :title="$page.props.appname" :isloader="isloading">
 <div class="row">
 <div class="col-12">
 <div class="card">
     <div class="card-header">
-	<h3><i class=" fa fa-money"></i> Users <small id="loader" style="display: none;"><i><i class="fa fa-circle-o-notch fa-spin"></i> Processing... </i></small></h3>
+	<h3><i class=" fa fa-user"></i> {{ $page.props.appname }}
+        <span style="font-size: 14px">
+                 &nbsp; | &nbsp; <a :href="route('be.admin.user.create')" title="Tambah User"><i class="fa fa-user-plus"></i> Tambah</a>
+        </span>&nbsp;&nbsp;
+        <small id="loader" v-if="isloading"><i><i class="fa fa-circle-o-notch fa-spin"></i> Processing... </i></small></h3>
 </div>
 <div class="card-body">
      <!-- content here -->
@@ -12,34 +16,49 @@
 <div class="row">
 <div class="col-12 mr-b-10">
     		<div style="padding-bottom: 5px; padding-top: 5px;">
-                 <input type="text" class="form-control" v-model="query" placeholder="Search..." style="float:left; margin-top: 6px; max-width: 150px;">
-                 <button name="help" class="btn bg-primary" onclick="location.href='#help';" title="Help"><i class="fa fa-question"></i> Help</button>
+                 <input type="text" class="form-control" v-model="query" placeholder="Pencarian..." style="float:left; margin-top: 6px; max-width: 150px;">
+                 <button name="help" class="btn bg-primary" onclick="location.href='#help';" title="Help"><i class="fa fa-question"></i> Bantuan</button>
 		</div>
-
 </div>
+<!-- pagination -->
+<div class="col-12 align-middle text-center" v-if="filterData.last_page > 1">
+    <div class="pagination">
+        <template v-for="(item, i) in filterData.links" :key="i">
+            <a href="javascript:" aria-label="Previous" v-if="i == 0">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+       <a class="page-link" href="javascript:" aria-label="Next" v-else-if="i == filterData.links.length - 1">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+            <a :class="{'active': filterData.current_page == item.label}" href="javascript:" @click="getPage(item.label)" v-else>{{item.label}}</a>
+        </template>
+</div>
+</div>
+<!-- end pagination -->
 </div>
 <!-- end header table -->
 <!-- start table -->
-		  <div class="overflow box-bordered" style="max-height: 70vh">
-			<table id="dataTable" class="table table-bordered table-hover text-nowrap">
+		  <div class="overflow mr-t-10 box-bordered" style="max-height: 75vh">
+			<table class="table table-bordered table-hover text-nowrap">
 				<thead class="thead-light">
 				<tr>
-				  <th colspan="4">Users oct 2021<b style="font-size:0;">,,,,</b></th>
+				  <th colspan="4">Pengguna<b style="font-size:0;">,,,,</b></th>
 				  <th style="text-align:right;">Total</th>
-				  <th style="text-align:right;" id="total">Rp 0</th>
+				  <th style="text-align:right;" id="total">{{ filterData.total }} Pengguna</th>
 				</tr>
 				<tr>
-				  <th>№</th>
-					<th>Name</th>
-					<th>Email</th>
-					<th>Roles</th>
-					<th>Active</th>
-					<th>Options</th>
+				  <th class="text-center">№</th>
+					<th class="pointer" title="Click to sort" @click="sort('name')"><i class="fa fa-sort"></i> Nama</th>
+					<th class="pointer" title="Click to sort" @click="sort('email')"><i class="fa fa-sort"></i> Email</th>
+					<th>Level</th>
+					<th>Aktif</th>
+					<th>Aksi</th>
 				</tr>
 				</thead>
 				<tbody>
                     <tr v-for="(item,index) in filterData.data" :key="index">
-      <th scope="row">
+      <th class="align-middle text-center">
+          <i class="fa fa-minus-square text-danger pointer" @click="remove(index)"></i> &nbsp;&nbsp;
           {{ filterData.from+index }}
       </th>
       <td>{{ item.name }}</td>
@@ -51,59 +70,59 @@
       </td>
       <td class="text-center">{{item.is_active ? 'Active':'Blocked'}}</td>
    <td>
-       <div class="d-flex justify-content-center" v-if="item.id != 1">
-           <div class="dropdown">
-  <span class="badge badge-pill badge-success p-2 m-1 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    Edit
-  </span>
-  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-    <a class="dropdown-item" href="javascript:" @click="switchActive(index)">{{ item.is_active ? 'Blocked' : 'Activated'}}</a>
-    <a class="dropdown-item" href="javascript:" @click="editUser(index)">Change Role</a>
-  </div>
-</div>
-            </div></td>
+       <div v-if="item.id != 1">
+           <a class="btn bg-warning" href="javascript:" @click="switchActive(index)">{{ item.is_active ? 'Blocked' : 'Activated'}}</a>
+    <a class="btn bg-danger" href="javascript:" @click="editUser(index)">Change Role</a>
+       </div>
+</td>
     </tr>
 				</tbody>
 			</table>
 		</div>
 <!-- end table -->
     <!-- end content -->
-</div>
-</div>
-<!-- modal -->
-<div class="modal-window" id="help" aria-hidden="true">
-  <div>
-  	<header><h1>Header Modal</h1></header>
-  	<a style="font-weight:bold;" href="#" title="Close" class="modal-close">X</a>
-    <p>OK Modal</p>
-  </div>
-</div>
-<!-- end modal -->
-</div>
-</div>
+     <jet-confirmation-modal id="help">
+      <template #title>
+        Tips Pencarian User
+      </template>
+      <template #content>
+        Pencarian user ini berdasarkan nama dan email
+      </template>
 
+      <template #footer>
+        <button>
+          Not
+        </button>
+
+        <button>
+          Usefull
+        </button>
+      </template>
+    </jet-confirmation-modal>
+</div>
+</div>
+</div>
+</div>
     </app-layout>
 </template>
 <script>
 import AppLayout from '@/Layouts/AppLayoutNet'
 import ApiManager from '../API/ApiManager'
-// import JetConfirmationModal from '@/Jetstream/ConfirmationModal'
-// import JetDangerButton from '@/Jetstream/DangerButton'
-// import JetSecondaryButton from '@/Jetstream/SecondaryButton'
+import JetConfirmationModal from '@/Jetstream/InfoModalNet'
 import BaseComponentVue from '../../Layouts/BaseComponent.vue'
 export default {
     extends: BaseComponentVue,
     components: {
         AppLayout,
-//         JetConfirmationModal,
-// JetDangerButton,
-// JetSecondaryButton,
+        JetConfirmationModal
     },
     data(){
         return{
             filterData: {
                 data: [],
             },
+            currentSortDir: "asc",
+            currentSortCol: "name",
             isloading: false,
             query:'',
             itemToChange: null,
@@ -129,6 +148,15 @@ export default {
         }
     },
     methods: {
+        sort(col){
+             if (this.currentSortCol === col) {
+        this.currentSortDir = this.currentSortDir === "asc" ? "desc" : "asc";
+      } else {
+        this.currentSortCol = col;
+      }
+      this.filterData.data.sort(this.sortBy(col,this.currentSortDir));
+    },
+
         getFilterData(page){
             this.isloading = true
             ApiManager.getUsers(page)
@@ -155,8 +183,15 @@ export default {
                 console.log(error)
             })
         },
+        remove(index){
+            let item = this.filterData.data[index]
+            this.action.title = `Remove user ${item.name}`
+            this.action.message = `This action can't be undo`
+            this.action.option = 'remove'
+            this.itemToChange = index
+            this.showAlert()
+        },
         editUser(index){
-            console.log('edit user')
             let item = this.filterData.data[index]
             this.itemToChange = index
             if(item.roles.length > 0){
@@ -175,8 +210,7 @@ export default {
                 this.action.option = 'role'
                 this.action.role = 1
             }
-            this.bootstrap = $('#confirmModalAction')
-            this.bootstrap.modal('toggle')
+           this.showAlert()
             }
         },
         switchActive(index){
@@ -191,14 +225,45 @@ export default {
                 this.action.message = `This action make the user can login to the Website`
                 this.action.option = 'switch'
             }
-            this.bootstrap = $('#confirmModalAction')
-            this.bootstrap.modal('toggle')
+            this.showAlert()
+        },
+        showAlert(){
+                        this.$swal.fire({
+  title: this.action.title,
+  text: this.action.message,
+ // showDenyButton: true,
+  showCancelButton: true,
+  confirmButtonText: 'Ya',
+ // denyButtonText: `Don't save`,
+}).then((result) => {
+  if (result.isConfirmed) {
+      this.updateUserAction()
+    this.$swal.fire('Saved!', '', 'success')
+  } else{
+    this.itemToChange = null
+  }
+})
         },
         updateUserAction(){
             if(this.action.option == 'role'){
                 return this.updateUserRole()
-            }
-            return this.updateUserActive()
+            }else if(this.action.option == 'remove'){
+                return this.postRemoveUser()
+            }else{
+            return this.updateUserActive()}
+        },
+        postRemoveUser(){
+            this.isloading = true
+            let item = this.filterData.data[this.itemToChange]
+            ApiManager.postRemoveUser(item).then((response)=>{
+                this.isloading = false
+                this.filterData.data.splice(this.itemToChange,1)
+                this.filterData.total -= 1
+                this.showToast('User removed')
+            }).catch((error)=>{
+                console.log(error)
+                this.isloading = false
+            })
         },
         updateUserActive(){
             this.isloading = true
@@ -208,8 +273,8 @@ export default {
                 this.isloading = false
                 this.filterData.data.splice(this.itemToChange,1,response.data.data)
                 this.showToast('User Updated')
-                 this.bootstrap = $('#confirmModalAction')
-            this.bootstrap.modal('toggle')
+            //      this.bootstrap = $('#confirmModalAction')
+            // this.bootstrap.modal('toggle')
             }).catch((error)=>{
                 console.log(error)
                 this.isloading = false
@@ -223,8 +288,8 @@ export default {
                 this.isloading = false
                 this.filterData.data.splice(this.itemToChange,1,response.data.data)
                 this.showToast('User Updated')
-                  this.bootstrap = $('#confirmModalAction')
-            this.bootstrap.modal('toggle')
+            //       this.bootstrap = $('#confirmModalAction')
+            // this.bootstrap.modal('toggle')
             }).catch((error)=>{
                 console.log(error)
                 this.isloading = false
