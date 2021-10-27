@@ -41,7 +41,7 @@ class CustomerMemberController extends BaseApiController
         return $this->successResponse($data);
     }
 
-    public function update(UpdateNetworkRequest $request, $id)
+    public function update(Request $request, $id)
     {
         $data = CustomerMember::find($id);
         $data->name = $request->name;
