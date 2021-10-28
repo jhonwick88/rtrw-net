@@ -1,4 +1,5 @@
-<h1>bschunts.com</h1>
+<h1>RT RW Net</h1>
+<p>Payment report system management for RTRWNet</p>
 
 ## How To Start
 
@@ -13,9 +14,13 @@
 ## Installation
 ```bash
 
-$ git clone -b snipperMaster https://gitlab.com/pintarmedia/coin-snipper.git
+$ mkdir YOUR_DIR
 
-$ cd snipperMaster/
+$ cd YOUR_DIR
+
+$ git clone -b masterDeni https://github.com/jhonwick88/rtrw-net.git
+
+$ cd rtrw-net
 
 $ composer install
 
@@ -41,13 +46,13 @@ $ git add --all
 
 $ git commit -m "what ever your change"
 
-$ git push origin snipperMaster
+$ git push origin masterDeni
 
 // on SSH server goto domain document path
 
 $ cd /public_html
 
-// make sure you're in snipperMaster branch
+// make sure you're in masterDeni branch
 
 $ git branch
 
@@ -61,5 +66,5 @@ $ git pull
 ```
 
 - Docummented by PINTARMEDIA
-- Last Update 20-08-2021 20:49 PM
+- Last Update 28-10-2021 21:56 PM
 - Location : Nganjuk City
