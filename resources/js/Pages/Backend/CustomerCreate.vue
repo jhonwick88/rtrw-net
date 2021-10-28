@@ -4,7 +4,10 @@
 <div class="col-8">
 <div class="card">
     <div class="card-header">
-	<h3><i class=" fa fa-user-plus"></i> {{$page.props.appname}} <small id="loader" style="display: none;"><i><i class="fa fa-circle-o-notch fa-spin"></i> Processing... </i></small></h3>
+	<h3><i class=" fa fa-user-plus"></i> {{$page.props.appname}}  <span style="font-size: 14px">
+    &nbsp; | &nbsp; <a :href="route('be.admin.customers')" title="kembali ke customers"><i class="fa fa-arrow-circle-left"></i> Kembali</a>
+    &nbsp;&nbsp;
+    </span><small id="loader" style="display: none;"><i><i class="fa fa-circle-o-notch fa-spin"></i> Processing... </i></small></h3>
 </div>
 <div class="card-body">
      <!-- content here -->

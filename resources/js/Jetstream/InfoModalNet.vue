@@ -11,7 +11,7 @@
         <slot name="content">
         </slot>
       </div>
-       <div class="modal-footer">
+       <div class="modal-footer text-right mr-t-10">
         <slot name="footer">
         </slot>
       </div>

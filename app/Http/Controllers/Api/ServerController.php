@@ -33,8 +33,8 @@ class ServerController extends BaseApiController
         $data->location = $request->location;
         $data->serial_number = $request->serial_number;
         $data->model = $request->model;
-        $data->activate_date = $request->activate_date;
-        $data->status = $request->status;
+        // $data->activate_date = $request->activate_date;
+        $data->status = 1;
 
         $data->saveOrFail();
 
@@ -48,8 +48,8 @@ class ServerController extends BaseApiController
         $data->location = $request->location;
         $data->serial_number = $request->serial_number;
         $data->model = $request->model;
-        $data->activate_date = $request->activate_date;
-        $data->status = $request->status;
+        // $data->activate_date = $request->activate_date ?? null;
+        // $data->status = $request->status ?? '';
         $data->saveOrFail();
         $data->refresh();
         return $this->successResponse($data);
@@ -66,6 +66,12 @@ class ServerController extends BaseApiController
     public function baseQuery(Request $request)
     {
         $query = Server::query();
+        if ($request->has('q')) {
+            $searchTerm = $request->q;
+            $query->where('name', 'LIKE', "%{$searchTerm}%");
+            $query->orWhere('location', 'LIKE', "%{$searchTerm}%");
+            $query->orderBy('created_at','desc');
+        }
         return $query;
     }
 }

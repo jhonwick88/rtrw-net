@@ -49,13 +49,38 @@ Route::group(['namespace' => 'Backend'], function () {
     Route::group(['middleware' => 'auth','prefix' => 'admin'], function () {
         Route::get('/', 'DashboardController@index')->name('be.admin');
         Route::get('/dashboard', 'DashboardController@index')->name('be.admin.dashboard');
-        Route::get('/customers-list', 'CustomerController@index')->name('be.admin.customers-list');
+        Route::group(['prefix' => 'users'], function(){
+            Route::get('/', 'UserController@index')->name('be.admin.user');
+            Route::get('/create', 'UserController@create')->name('be.admin.user.create');
+        });
+        Route::group(['prefix' => 'customers'], function(){
+            Route::get('/', 'CustomerController@index')->name('be.admin.customers');
+            Route::get('/create', 'CustomerController@create')->name('be.admin.customers.create');
+            Route::get('/member/{id}', 'CustomerController@member')->name('be.admin.customers.member');
+            Route::get('/member/create/{id}', 'CustomerController@createMember')->name('be.admin.customers.member.create');
+        });
+        // Route::group(['prefix' => 'customer-members'], function(){
+        //     Route::get('/', 'CustomerMemberController@index')->name('be.admin.customer-members');
+        //     Route::get('/create', 'CustomerMemberController@create')->name('be.admin.customer-members.create');
+        // });
+        Route::group(['prefix' => 'payments'], function(){
+            Route::get('/', 'PaymentController@index')->name('be.admin.payments');
+            Route::get('/create', 'PaymentController@create')->name('be.admin.payments.create');
+        });
+        Route::group(['prefix' => 'networks'], function(){
+            Route::get('/', 'NetworkController@index')->name('be.admin.networks');
+            Route::get('/create', 'NetworkController@create')->name('be.admin.networks.create');
+        });
+        Route::group(['prefix' => 'servers'], function(){
+            Route::get('/', 'ServerController@index')->name('be.admin.servers');
+            Route::get('/create', 'ServerController@create')->name('be.admin.servers.create');
+        });
+        Route::group(['prefix' => 'payment-methods'], function(){
+            Route::get('/', 'PaymentMethodController@index')->name('be.admin.payment-methods');
+            Route::get('/create', 'PaymentMethodController@create')->name('be.admin.payment-methods.create');
+        });
         Route::get('/settings', 'SettingController@index')->name('be.admin.setting');
         Route::get('/about', 'DashboardController@about')->name('be.admin.about');
-        //User
-        Route::get('/users', 'UserController@index')->name('be.admin.user');
-        Route::get('/user-create', 'UserController@create')->name('be.admin.user.create');
-
         // trash
         Route::get('/coins', 'CoinController@index')->name('be.admin.coin');
         Route::get('/watchlist', 'WatchlistController@index')->name('be.admin.watchlist');

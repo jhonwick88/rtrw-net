@@ -20,6 +20,7 @@ Route::post('/login', 'Api\AuthController@login');
 Route::group(['middleware'=>['auth:sanctum'],'namespace' => 'Api'], function () {
     Route::group(['prefix' => 'user'], function () {
         Route::get('index','UserController@index')->name('api.user.index');
+        Route::post('store','AuthController@register')->name('api.user.store');
         Route::put('update/{id}','UserController@update')->name('api.user.update');
         Route::delete('destroy/{id}','UserController@destroy')->name('api.user.destroy');
     });
@@ -45,7 +46,6 @@ Route::group(['middleware'=>['auth:sanctum'],'namespace' => 'Api'], function () 
         Route::post('store','ServerController@store')->name('api.server.store');
         Route::put('update/{id}','ServerController@update')->name('api.server.update');
        Route::delete('destroy/{id}','ServerController@destroy')->name('api.server.destroy');
-      // Route::delete('delete/{id}','ServerController@delete')->name('api.server.delete');
     });
     //Network
     Route::group(['prefix' => 'network'], function () {

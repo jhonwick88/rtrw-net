@@ -6,7 +6,7 @@
     <div class="card-header">
 	<h3><i class=" fa fa-user"></i> {{ $page.props.appname }}
         <span style="font-size: 14px">
-                 &nbsp; | &nbsp; <a :href="route('be.admin.customers.create')" title="Tambah User"><i class="fa fa-user-plus"></i> Tambah</a>
+                 &nbsp; | &nbsp; <a :href="route('be.admin.servers.create')" title="Tambah Server"><i class="fa fa-user-plus"></i> Tambah</a>
         </span>&nbsp;&nbsp;
         <small id="loader" v-if="isloading"><i><i class="fa fa-circle-o-notch fa-spin"></i> Processing... </i></small></h3>
 </div>
@@ -42,20 +42,17 @@
 			<table class="table table-bordered table-hover text-nowrap">
 				<thead class="thead-light">
 				<tr>
-				  <th colspan="8">{{ $page.props.title }}<b style="font-size:0;">,,,,</b></th>
+				  <th colspan="5">{{ $page.props.title }}<b style="font-size:0;">,,,,</b></th>
 				  <th style="text-align:right;">Total</th>
 				  <th style="text-align:right;" id="total">{{ filterData.total }}</th>
 				</tr>
 				<tr>
 				  <th class="text-center">№</th>
 					<th class="pointer" title="Click to sort" @click="sort('name')"><i class="fa fa-sort"></i> Nama</th>
-					<th> Alamat</th>
-					<th>Telp</th>
-					<th class="pointer" title="Click to sort" @click="sort('server_id')"><i class="fa fa-sort"></i> Server</th>
-					<th class="pointer" title="Click to sort" @click="sort('network_type')"><i class="fa fa-sort"></i> Network</th>
-					<th>Kecepatan</th>
-					<th>Port</th>
-                    <th>Koneksi</th>
+					<th class="pointer" title="Click to sort" @click="sort('location')"><i class="fa fa-sort"></i> Lokasi</th>
+					<th>Nomor Seri</th>
+					<th class="pointer" title="Click to sort" @click="sort('model')"><i class="fa fa-sort"></i> Model</th>
+					<th class="pointer" title="Click to sort" @click="sort('created_at')"><i class="fa fa-sort"></i> Dibuat tgl</th>
 					<th>Aksi</th>
 				</tr>
 				</thead>
@@ -66,15 +63,11 @@
           {{ filterData.from+index }}
       </th>
       <td>{{ item.name }}</td>
-      <td>{{ item.adress }}</td>
-      <td>{{ item.phone }}</td>
-      <td>{{ item.server.location }}</td>
-      <td>{{ item.network_type }}</td>
-      <td>{{ item.network.name }}</td>
-      <td>{{ item.connection }}</td>
-      <td>{{ item.port }}</td>
+      <td>{{ item.location }}</td>
+      <td>{{ item.serial_number }}</td>
+      <td>{{ item.model }}</td>
+      <td>{{ item.updated_at }}</td>
    <td>
-        <a class="btn bg-warning" :href="`customers/member/${item.id}`" v-show="item.network_type=='VOUCHER'">Anggota</a>
     <a class="btn bg-primary" href="javascript:" @click="editUser(index)">Edit</a>
 </td>
     </tr>
@@ -102,55 +95,29 @@
     <!-- edit modal -->
      <jet-confirmation-modal id="edit">
      <template #title>
-        Edit {{userItem.name}}
+        Edit {{serverItem.name}}
       </template>
       <template #content>
        <table class="table">
   <tbody>
   <tr>
-    <td class="align-middle">Nama</td><td><input class="form-control" type="text" autocomplete="off" autofocus="" v-model="userItem.name"></td>
+    <td class="align-middle">Nama</td><td><input class="form-control" type="text" autocomplete="off" autofocus="" v-model="serverItem.name"></td>
   </tr>
     <tr>
-    <td class="align-middle">Alamat</td><td><input class="form-control" type="text" v-model="userItem.adress"></td>
+    <td class="align-middle">Lokasi</td><td><input class="form-control" type="text" v-model="serverItem.location"></td>
   </tr>
     <tr>
-    <td class="align-middle">Telp</td><td><input class="form-control" type="text" v-model="userItem.phone"></td>
+    <td class="align-middle">Nomor Seri</td><td><input class="form-control" type="text" v-model="serverItem.serial_number"></td>
   </tr>
-      <tr>
-    <td class="align-middle">Kecepatan</td><td>
-       <select class="form-control" v-model="userItem.network_id">
-           <option v-for="(tipe,index) in getNetworks(userItem.network_type == 'PPPOE' ? 1 : 2)" :key="index" :value="tipe.id">{{ tipe.name}}</option>
-       </select>
-    </td>
+  <tr>
+    <td class="align-middle">Model</td><td><input class="form-control" type="text" v-model="serverItem.model"></td>
   </tr>
-        <tr>
-    <td class="align-middle">Port</td><td>
-       <select class="form-control" v-model="userItem.port">
-           <option v-for="(tipe,index) in ports" :key="index" :value="tipe.name">{{ tipe.name}}</option>
-       </select>
-    </td>
-  </tr>
-   <tr>
-    <td class="align-middle">Koneksi</td><td>
-       <select class="form-control" v-model="userItem.connection">
-           <option v-for="(tipe,index) in connections" :key="index" :value="tipe.name">{{ tipe.name}}</option>
-       </select>
-    </td>
-  </tr>
-     <tr>
-    <td class="align-middle">Parent</td><td>
-       <select class="form-control" v-model="userItem.parent_id">
-           <option v-for="(parent,index) in filterData.data" :key="index" :value="parent.id">{{ parent.name}}</option>
-       </select>
-    </td>
-  </tr>
-
   </tbody>
        </table>
       </template>
 
       <template #footer>
-        <button class="btn bg-danger" @click="updateCustomer">
+        <button class="btn bg-danger" @click="updateItem">
           Simpan
         </button>
       </template>
@@ -178,25 +145,16 @@ export default {
             filterData: {
                 data: [],
             },
-            ports:[
-                { name:'A'},
-                { name:'B'}
-            ],
-            connections:[{name:'Lan'},{name:'FO'}],
             currentSortDir: "asc",
             currentSortCol: "name",
             isloading: false,
             query:'',
             itemToChange: null,
-            userItem:{
+            serverItem:{
                 name:'',
-                adress:'',
-                port:'',
-                phone:'',
-                network_type:'',
-                network_id:'',
-                connection:'',
-                parent_id:''
+                location:'',
+                serial_number:'',
+                model:''
             },
             action:{
                 title:'',
@@ -226,16 +184,9 @@ export default {
       }
       this.filterData.data.sort(this.sortBy(col,this.currentSortDir));
     },
-    getNetworks(type){ //1 pppoe 2 voucher
-        let networks = this.$page.props.networks
-        networks = networks.filter((data)=>{
-            return (data.network_type == type)
-        })
-        return networks
-    },
         getFilterData(page){
             this.isloading = true
-            ApiManager.getCustomers(page)
+            ApiManager.getServers(page)
                 .then((response) => {
                     this.isloading = false
                     this.filterData = response.data.data
@@ -251,7 +202,7 @@ export default {
         },
         searchResults(){
             this.isloading = true
-            ApiManager.getSearchCustomers(this.query).then((response)=>{
+            ApiManager.getSearchServers(this.query).then((response)=>{
                 this.isloading = false
                 this.filterData = response.data.data
             }).catch((error)=>{
@@ -261,8 +212,8 @@ export default {
         },
         remove(index){
             let item = this.filterData.data[index]
-            this.action.title = `Hapus pelanggan ${item.name}`
-            this.action.message = `Anggota & member juga akan di hapus. Data yang sudah dihapus tidak dapat dikembalikan`
+            this.action.title = `Hapus server ${item.name}`
+            this.action.message = `Data yang sudah dihapus tidak dapat dikembalikan`
             this.action.option = 'remove'
             this.itemToChange = index
             this.showAlert()
@@ -270,21 +221,20 @@ export default {
         editUser(index){
             let item = this.filterData.data[index]
             this.itemToChange = index
-            this.userItem = item
+            this.serverItem = item
             location.href='#edit'
         },
         showAlert(){
                 this.$swal.fire({
                 title: this.action.title,
                 text: this.action.message,
-                // showDenyButton: true,
                 showCancelButton: true,
                 confirmButtonText: 'Ya',
-                // denyButtonText: `Don't save`,
+                cancelButtonText: `Batal`,
                 }).then((result) => {
                 if (result.isConfirmed) {
                     this.updateUserAction()
-                    this.$swal.fire('Saved!', '', 'success')
+                    //this.$swal.fire('Saved!', '', 'success')
                 } else{
                     this.itemToChange = null
                 }
@@ -292,30 +242,31 @@ export default {
         },
         updateUserAction(){
 if(this.action.option == 'remove'){
-                return this.postRemoveUser()
+                return this.postRemoveItem()
             }
         },
-        postRemoveUser(){
+        postRemoveItem(){
             this.isloading = true
             let item = this.filterData.data[this.itemToChange]
-            ApiManager.postRemoveCustomer(item).then((response)=>{
+            ApiManager.postRemoveServer(item).then((response)=>{
                 this.isloading = false
                 this.filterData.data.splice(this.itemToChange,1)
                 this.filterData.total -= 1
-                this.showToast('Pelanggan terhapus')
+                this.showToast('Server terhapus')
             }).catch((error)=>{
-                console.log(error)
+                this.showToast('Oops hapus dulu data pelanggan di server ini')
+                //console.log('error '+error)
                 this.isloading = false
             })
         },
-        updateCustomer(){
+        updateItem(){
             this.isloading = true
-            ApiManager.postUpdateCustomer(this.userItem).then((response)=>{
+            ApiManager.postUpdateServer(this.serverItem).then((response)=>{
                 this.isloading = false
-                if(response.data.code == 0){
-                this.filterData.data.splice(this.itemToChange,1,response.data.data)
-                this.showToast('User Updated')
-                window.location.href="#"
+                if(response.data.code ==0){
+                    this.filterData.data.splice(this.itemToChange,1,response.data.data)
+                    this.showToast('Server Updated')
+                    window.location.href="#"
                 }
             }).catch((error)=>{
                 console.log(error)

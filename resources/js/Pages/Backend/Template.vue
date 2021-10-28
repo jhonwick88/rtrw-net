@@ -1,5 +1,5 @@
 <template>
-    <app-layout>
+    <app-layout :title="$page.props.appname" :isloader="isloading">
 <div class="row">
 <div class="col-12">
 <div class="card">
@@ -48,14 +48,16 @@
 </template>
 <script>
 import AppLayout from '@/Layouts/AppLayoutNet'
+import BaseComponentVue from '../../Layouts/BaseComponent.vue'
 
 export default {
+    extends: BaseComponentVue,
     components: {
         AppLayout,
     },
     data(){
         return{
-
+             isloading: false,
         }
     },
     created() {

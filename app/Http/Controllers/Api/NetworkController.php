@@ -62,6 +62,12 @@ class NetworkController extends BaseApiController
     public function baseQuery(Request $request)
     {
         $query = Network::query();
+        if ($request->has('q')) {
+            $searchTerm = $request->q;
+            $query->where('name', 'LIKE', "%{$searchTerm}%");
+            $query->orWhere('price', 'LIKE', "%{$searchTerm}%");
+            $query->orderBy('created_at','desc');
+        }
         return $query;
     }
 }

@@ -60,6 +60,12 @@ class PaymentMethodController extends BaseApiController
     public function baseQuery(Request $request)
     {
         $query = PaymentMethod::query();
+        if ($request->has('q')) {
+            $searchTerm = $request->q;
+            $query->where('name', 'LIKE', "%{$searchTerm}%");
+            $query->orWhere('account_number', 'LIKE', "%{$searchTerm}%");
+            $query->orderBy('created_at','desc');
+        }
         return $query;
     }
 }

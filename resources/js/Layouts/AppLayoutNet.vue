@@ -48,29 +48,29 @@
           <a href="./?session=PINTARMEDIA" class="menu ">
             <i class="fa fa-dashboard"></i> Dashboard </a>
           <!--report-->
-          <a href="./?report=selling&amp;idbl=oct2021&amp;session=PINTARMEDIA" class="menu ">
+          <a :href="route('be.admin.payments')" class="menu ">
             <i class="nav-icon fa fa-money"></i> Laporan </a>
           <!--pelanggan-->
           <div class="dropdown-btn ">
             <i class=" fa fa-gear"></i> Pelanggan <i class="fa fa-caret-down"></i> &nbsp;
           </div>
           <div class="dropdown-container ">
-               <jet-nav-link :href="route('be.admin.customers-list')" :active="route().current('be.admin.customers-list')" :ismenu="false">
+               <jet-nav-link :href="route('be.admin.customers')" :active="route().current('be.admin.customers')" :ismenu="false">
             <i class="fa fa-clock-o "></i> Daftar Pelanggan
             </jet-nav-link>
-            <a href="./admin.php?id=reboot&amp;session=PINTARMEDIA" class="">
+            <a :href="route('be.admin.customers.create')" class="">
               <i class="fa fa-power-off "></i> Tambah Pelanggan </a>
           </div>
           <!--system-->
           <div class="dropdown-btn">
             <i class="fa fa-wifi"></i> Sistem <i class="fa fa-caret-down"></i>
           </div>
-          <div class="dropdown-container menu-open">
+          <div class="dropdown-container">
             <!--users-->
-            <div class="dropdown-btn active">
+            <div class="dropdown-btn">
               <i class="fa fa-users"></i> Users <i class="fa fa-caret-down"></i>
             </div>
-            <div class="dropdown-container menu-open">
+            <div class="dropdown-container">
                 <jet-nav-link :href="route('be.admin.user')" :active="route().current('be.admin.user')" :ismenu="false">
                 <i class="fa fa-list "></i> User List
                 </jet-nav-link>
@@ -84,26 +84,26 @@
               <i class="fa fa-users"></i> Server <i class="fa fa-caret-down"></i>
             </div>
             <div class="dropdown-container ">
-              <a href="./?hotspot=users&amp;profile=all&amp;session=PINTARMEDIA" class=""> &nbsp;&nbsp;&nbsp; <i class="fa fa-list "></i> Daftar Server </a>
-              <a href="./?hotspot-user=add&amp;session=PINTARMEDIA" class=""> &nbsp;&nbsp;&nbsp; <i class="fa fa-user-plus "></i> Tambah Server </a>
+              <a :href="route('be.admin.servers')" class=""> &nbsp;&nbsp;&nbsp; <i class="fa fa-list "></i> Daftar Server </a>
+              <a :href="route('be.admin.servers.create')" class=""> &nbsp;&nbsp;&nbsp; <i class="fa fa-user-plus "></i> Tambah Server </a>
             </div>
             <!-- jaringan -->
             <div class="dropdown-btn ">
               <i class="fa fa-users"></i> Jaringan <i class="fa fa-caret-down"></i>
             </div>
             <div class="dropdown-container ">
-              <a href="./?hotspot=users&amp;profile=all&amp;session=PINTARMEDIA" class=""> &nbsp;&nbsp;&nbsp; <i class="fa fa-list "></i> Daftar Jaringan </a>
-              <a href="./?hotspot-user=add&amp;session=PINTARMEDIA" class=""> &nbsp;&nbsp;&nbsp; <i class="fa fa-user-plus "></i> Tambah Jaringan </a>
+              <a :href="route('be.admin.networks')" class=""> &nbsp;&nbsp;&nbsp; <i class="fa fa-list "></i> Daftar Jaringan </a>
+              <a :href="route('be.admin.networks.create')" class=""> &nbsp;&nbsp;&nbsp; <i class="fa fa-user-plus "></i> Tambah Jaringan </a>
             </div>
             <!-- tipe jaringan -->
-            <a href="./admin.php?id=settings&amp;session=PINTARMEDIA" class="menu ">
-              <i class="fa fa-gear "></i> Tipe Jaringan </a>
+            <!-- <a :href="route('be.admin.networks')" class="menu ">
+              <i class="fa fa-gear "></i> Tipe Jaringan </a> -->
             <div class="dropdown-btn ">
               <i class="fa fa-users"></i> Pembayaran <i class="fa fa-caret-down"></i>
             </div>
             <div class="dropdown-container ">
-              <a href="./?hotspot=users&amp;profile=all&amp;session=PINTARMEDIA" class=""> &nbsp;&nbsp;&nbsp; <i class="fa fa-list "></i> Daftar Metoda </a>
-              <a href="./?hotspot-user=add&amp;session=PINTARMEDIA" class=""> &nbsp;&nbsp;&nbsp; <i class="fa fa-user-plus "></i> Tambah Metoda </a>
+              <a :href="route('be.admin.payment-methods')" class=""> &nbsp;&nbsp;&nbsp; <i class="fa fa-list "></i> Daftar Metoda </a>
+              <a :href="route('be.admin.payment-methods.create')" class=""> &nbsp;&nbsp;&nbsp; <i class="fa fa-user-plus "></i> Tambah Metoda </a>
             </div>
           </div>
           <!--settings-->
