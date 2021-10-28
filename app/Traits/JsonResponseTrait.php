@@ -9,7 +9,7 @@ trait JsonResponseTrait
         return response()->json($this->responseBag($code, $message, $data, $option), 200);
     }
 
-    public function failedResponse($message, $data = [], $code = -1, $httpCode = 422)
+    public function failedResponse($message, $data = [], $code = -1, $httpCode = 200)
     {
         return response()->json($this->responseBag($code, $message, $data), $httpCode);
     }
