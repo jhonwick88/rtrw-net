@@ -17,9 +17,17 @@ class Customer extends Model
         'discount',
         'server_id',
         'network_id',
+        'port',
+        'connection',
+        'parent_id',
         'status',
     ];
     protected $appends = ['network_type','total_payment'];
+
+    public function parent()
+    {
+        return $this->belongsTo(self::class, 'parent_id');
+    }
 
     public function customerMember()
     {

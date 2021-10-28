@@ -1,153 +1,244 @@
 <template>
-    <app-layout :title="$page.props.appname">
-        <!-- start content -->
-          <div class="row justify-content-center">
-    <div class="col-md-12">
-      <div class="card shadow bg-light">
-          <!-- head -->
-                  <div class="card-body bg-white px-5 pt-3 pb-0 border-bottom rounded-topp">
-          <div class="mx-3 mt-3">
-            <div class="d-flex justify-content-between">
-            <h3 class="h3 my-4">
-              Coin list
-            </h3>
-            <!-- start search -->
-             <div class="searchbar">
-          <input class="search_input" type="text" v-model="query" placeholder="Search...">
-          <a href="#" class="search_icon"><i class='bx bx-loader bx-spin' v-if="isloading"></i><i class="fas fa-search" v-else></i></a>
-        </div>
-            <!-- end search -->
-            </div>
-
-            <div class="text-muted mb-3">
-             Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos vel, eum consectetur dolor doloribus incidunt labore. Totam harum iste non libero nemo pariatur voluptates possimus neque. Itaque voluptate dignissimos pariatur.
-            </div>
-            <!-- pagination -->
-            <div class="d-flex justify-content-center p-2">
-                    <nav aria-label="Page navigation example" v-if="filterData.last_page > 1">
-  <ul class="pagination">
-    <li class="page-item" v-for="(item, i) in filterData.links" :key="i">
-        <a class="page-link" href="javascript:" aria-label="Previous" v-if="i == 0">
+<app-layout :title="$page.props.appname" :isloader="isloading">
+<div class="row">
+<div class="col-12">
+<div class="card">
+    <div class="card-header">
+	<h3><i class=" fa fa-user"></i> {{ $page.props.appname }}
+        <span style="font-size: 14px">
+                 &nbsp; | &nbsp; <a :href="route('be.admin.customers.create')" title="Tambah User"><i class="fa fa-user-plus"></i> Tambah</a>
+        </span>&nbsp;&nbsp;
+        <small id="loader" v-if="isloading"><i><i class="fa fa-circle-o-notch fa-spin"></i> Processing... </i></small></h3>
+</div>
+<div class="card-body">
+     <!-- content here -->
+<!-- header table -->
+<div class="row">
+<div class="col-12 mr-b-10">
+    		<div style="padding-bottom: 5px; padding-top: 5px;">
+                 <input type="text" class="form-control" v-model="query" placeholder="Pencarian..." style="float:left; margin-top: 6px; max-width: 150px;">
+                 <button name="help" class="btn bg-primary" onclick="location.href='#help';" title="Help"><i class="fa fa-question"></i> Info</button>
+		</div>
+</div>
+<!-- pagination -->
+<div class="col-12 align-middle text-center" v-if="filterData.last_page > 1">
+    <div class="pagination">
+        <template v-for="(item, i) in filterData.links" :key="i">
+            <a href="javascript:" aria-label="Previous" v-if="i == 0">
         <span aria-hidden="true">&laquo;</span>
       </a>
-      <a class="page-link" href="javascript:" aria-label="Next" v-else-if="i == filterData.links.length - 1">
+       <a class="page-link" href="javascript:" aria-label="Next" v-else-if="i == filterData.links.length - 1">
         <span aria-hidden="true">&raquo;</span>
       </a>
-       <a class="page-link" href="javascript:" @click="getPage(item.label)" v-else>{{item.label}}</a>
-   </li>
-  </ul>
-</nav>
-            </div>
-                    <!-- end pagination -->
-          </div>
-        </div>
-          <!-- end head -->
-          <!-- start here -->
-          <table class="table table-hover" v-if="filterData.data.length > 0">
-  <thead class="thead-dark">
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col"></th>
-        <th scope="col">Name</th>
-        <th scope="col">Chain</th>
-        <th scope="col">Symbol</th>
-        <th scope="col">MarketCap</th>
-        <th scope="col">Price</th>
-        <th scope="col">Launched</th>
-        <th scope="col">Votes</th>
-        <th scope="col">Promoted</th>
-        <th scope="col">
-            Options
-        </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr v-for="(item,index) in filterData.data" :key="index">
-      <th scope="row">
+            <a :class="{'active': filterData.current_page == item.label}" href="javascript:" @click="getPage(item.label)" v-else>{{item.label}}</a>
+        </template>
+</div>
+</div>
+<!-- end pagination -->
+</div>
+<!-- end header table -->
+<!-- start table -->
+		  <div class="overflow mr-t-10 box-bordered" style="max-height: 75vh">
+			<table class="table table-bordered table-hover text-nowrap">
+				<thead class="thead-light">
+				<tr>
+				  <th colspan="8">{{ $page.props.title }}<b style="font-size:0;">,,,,</b></th>
+				  <th style="text-align:right;">Total</th>
+				  <th style="text-align:right;" id="total">{{ filterData.total }}</th>
+				</tr>
+				<tr>
+				  <th class="text-center">№</th>
+					<th class="pointer" title="Click to sort" @click="sort('name')"><i class="fa fa-sort"></i> Nama</th>
+					<th> Alamat</th>
+					<th>Telp</th>
+					<th class="pointer" title="Click to sort" @click="sort('server_id')"><i class="fa fa-sort"></i> Server</th>
+					<th class="pointer" title="Click to sort" @click="sort('network_type')"><i class="fa fa-sort"></i> Network</th>
+					<th>Kecepatan</th>
+					<th>Port</th>
+                    <th>Koneksi</th>
+					<th>Aksi</th>
+				</tr>
+				</thead>
+				<tbody>
+                    <tr v-for="(item,index) in filterData.data" :key="index">
+      <th class="align-middle text-center">
+          <i class="fa fa-minus-square text-danger pointer" @click="remove(index)"></i> &nbsp;&nbsp;
           {{ filterData.from+index }}
       </th>
-      <td>
-          <div class="flex">
-         <img :src="item.logo" alt="" height="24">
-            </div>
-      </td>
       <td>{{ item.name }}</td>
-      <td class="text-uppercase"><span class="badge badge-pill badge-secondary p-2">{{ item.network.sort_name }}</span></td>
-      <td class="text-uppercase">
-      {{ item.symbol }}
-   </td>
-      <td v-if="item.ispresale"><span class="presale">Presale</span></td>
-   <td v-else>{{ item.marketcap!=null ? `$${item.marketcap}` : `-`}}</td>
-   <td v-if="item.ispresale"> - </td>
-   <td v-else>{{ item.price_usd!=null ? `$${item.price_usd}` : `-`}} </td>
-   <td>{{ item.launch_on }}</td>
-   <td><span class="votes">{{item.votes.all}}</span></td>
-   <td>{{item.ispromoted == 1 ? `Yes`:`No`}}</td>
-   <td>            <div class="d-flex justify-content-center">
-                <a :href="`/coin/${item.slug}`" target="_blank" class="badge badge-pill badge-primary p-2 m-1" role="button">View</a>
-                <span class="badge badge-pill badge-success p-2 m-1" role="button" @click="editCoin(item,index)">Edit</span>
-                <span class="badge badge-pill badge-warning p-2 m-1" role="button" @click="deleteCoin(index)">Delete</span>
-            </div></td>
+      <td>{{ item.adress }}</td>
+      <td>{{ item.phone }}</td>
+      <td>{{ item.server.location }}</td>
+      <td>{{ item.network_type }}</td>
+      <td>{{ item.network.name }}</td>
+      <td>{{ item.connection }}</td>
+      <td>{{ item.port }}</td>
+   <td>
+        <a class="btn bg-warning" :href="`customers/member/${item.id}`" v-show="item.network_type=='VOUCHER'">Anggota</a>
+    <a class="btn bg-primary" href="javascript:" @click="editUser(index)">Edit</a>
+</td>
     </tr>
-  </tbody>
-</table>
-          <!-- end table -->
-      </div>
-    </div>
-          </div>
-          <!-- end content -->
-          <edit-coin-form :coinItem="coinItem" @coinUpdated="coinUpdated" :network="network" ref="childComponent"/>
-          <confirm-delete :itemData="coinItem" @actionDelete="actionDelete" ref="childDelete" />
+				</tbody>
+			</table>
+		</div>
+<!-- end table -->
+    <!-- end content -->
+     <jet-confirmation-modal id="help">
+      <template #title>
+        Info
+      </template>
+      <template #content>
+          <b>Limited</b><br>
+        - Network tidak dapat di ubah
+      </template>
 
+      <template #footer>
+
+        <button>
+          Mengerti
+        </button>
+      </template>
+    </jet-confirmation-modal>
+    <!-- edit modal -->
+     <jet-confirmation-modal id="edit">
+     <template #title>
+        Edit {{userItem.name}}
+      </template>
+      <template #content>
+       <table class="table">
+  <tbody>
+  <tr>
+    <td class="align-middle">Nama</td><td><input class="form-control" type="text" autocomplete="off" autofocus="" v-model="userItem.name"></td>
+  </tr>
+    <tr>
+    <td class="align-middle">Alamat</td><td><input class="form-control" type="text" v-model="userItem.adress"></td>
+  </tr>
+    <tr>
+    <td class="align-middle">Telp</td><td><input class="form-control" type="text" v-model="userItem.phone"></td>
+  </tr>
+      <tr>
+    <td class="align-middle">Kecepatan</td><td>
+       <select class="form-control" v-model="userItem.network_id">
+           <option v-for="(tipe,index) in getNetworks(userItem.network_type == 'PPPOE' ? 1 : 2)" :key="index" :value="tipe.id">{{ tipe.name}}</option>
+       </select>
+    </td>
+  </tr>
+        <tr>
+    <td class="align-middle">Port</td><td>
+       <select class="form-control" v-model="userItem.port">
+           <option v-for="(tipe,index) in ports" :key="index" :value="tipe.name">{{ tipe.name}}</option>
+       </select>
+    </td>
+  </tr>
+   <tr>
+    <td class="align-middle">Koneksi</td><td>
+       <select class="form-control" v-model="userItem.connection">
+           <option v-for="(tipe,index) in connections" :key="index" :value="tipe.name">{{ tipe.name}}</option>
+       </select>
+    </td>
+  </tr>
+     <tr>
+    <td class="align-middle">Parent</td><td>
+       <select class="form-control" v-model="userItem.parent_id">
+           <option v-for="(parent,index) in filterData.data" :key="index" :value="parent.id">{{ parent.name}}</option>
+       </select>
+    </td>
+  </tr>
+
+  </tbody>
+       </table>
+      </template>
+
+      <template #footer>
+        <button class="btn bg-danger" @click="updateCustomer">
+          Simpan
+        </button>
+      </template>
+    </jet-confirmation-modal>
+    <!-- end edit modal -->
+</div>
+</div>
+</div>
+</div>
     </app-layout>
 </template>
 <script>
 import AppLayout from '@/Layouts/AppLayoutNet'
 import ApiManager from '../API/ApiManager'
-import EditCoinForm from './EditCoinForm'
-import ConfirmDelete from './ConfirmDelete'
+import JetConfirmationModal from '@/Jetstream/InfoModalNet'
 import BaseComponentVue from '../../Layouts/BaseComponent.vue'
 export default {
     extends: BaseComponentVue,
-    props:['network'],
     components: {
         AppLayout,
-        EditCoinForm,
-        ConfirmDelete
+        JetConfirmationModal
     },
     data(){
         return{
             filterData: {
                 data: [],
             },
-            coinsby: 'alltime',
+            ports:[
+                { name:'A'},
+                { name:'B'}
+            ],
+            connections:[{name:'Lan'},{name:'FO'}],
+            currentSortDir: "asc",
+            currentSortCol: "name",
             isloading: false,
             query:'',
-            coinItem: null,
-            indexCoin: null
+            itemToChange: null,
+            userItem:{
+                name:'',
+                adress:'',
+                port:'',
+                phone:'',
+                network_type:'',
+                network_id:'',
+                connection:'',
+                parent_id:''
+            },
+            action:{
+                title:'',
+                message:'',
+                option:''
+            },
         }
     },
     created() {
-        this.getFilterData(1,this.coinsby)
+        this.getFilterData(1)
     },
     watch: {
         query: function(newVal) {
             if (newVal.length >2) {
                 this.searchResults();
             }else{
-                this.getFilterData(1,this.coinsby)
+                this.getFilterData(1)
             }
         }
     },
     methods: {
-        getFilterData(page,filter){
+        sort(col){
+             if (this.currentSortCol === col) {
+        this.currentSortDir = this.currentSortDir === "asc" ? "desc" : "asc";
+      } else {
+        this.currentSortCol = col;
+      }
+      this.filterData.data.sort(this.sortBy(col,this.currentSortDir));
+    },
+    getNetworks(type){ //1 pppoe 2 voucher
+        let networks = this.$page.props.networks
+        networks = networks.filter((data)=>{
+            return (data.network_type == type)
+        })
+        return networks
+    },
+        getFilterData(page){
             this.isloading = true
-            this.coinsby = filter
-            ApiManager.getFiltersCoins(page,filter)
+            ApiManager.getCustomers(page)
                 .then((response) => {
                     this.isloading = false
                     this.filterData = response.data.data
-                    this.coinsby = response.data.option
                     //console.log(this.coinsby)
                 })
                 .catch((error) => {
@@ -156,11 +247,11 @@ export default {
         },
         getPage(page){
              if(!page.includes('&'))
-              this.getFilterData(page,this.coinsby)
+              this.getFilterData(page)
         },
         searchResults(){
             this.isloading = true
-            ApiManager.getSearchResult(this.query).then((response)=>{
+            ApiManager.getSearchCustomers(this.query).then((response)=>{
                 this.isloading = false
                 this.filterData = response.data.data
             }).catch((error)=>{
@@ -168,80 +259,70 @@ export default {
                 console.log(error)
             })
         },
-        editCoin(item,index){
-            this.$refs.childComponent.showUpdateModal()
-            this.coinItem = item
-            this.indexCoin = index
-            //console.log('item edit')
+        remove(index){
+            let item = this.filterData.data[index]
+            this.action.title = `Hapus pelanggan ${item.name}`
+            this.action.message = `Anggota & member juga akan di hapus. Data yang sudah dihapus tidak dapat dikembalikan`
+            this.action.option = 'remove'
+            this.itemToChange = index
+            this.showAlert()
         },
-        coinUpdated(result){
-            if(result.data.code == 0){
-                //console.log('update results')
-                this.filterData.data.splice(this.indexCoin,1,result.data.data)
+        editUser(index){
+            let item = this.filterData.data[index]
+            this.itemToChange = index
+            this.userItem = item
+            location.href='#edit'
+        },
+        showAlert(){
+                this.$swal.fire({
+                title: this.action.title,
+                text: this.action.message,
+                // showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: 'Ya',
+                // denyButtonText: `Don't save`,
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    this.updateUserAction()
+                    this.$swal.fire('Saved!', '', 'success')
+                } else{
+                    this.itemToChange = null
+                }
+                })
+        },
+        updateUserAction(){
+if(this.action.option == 'remove'){
+                return this.postRemoveUser()
             }
         },
-        deleteCoin(index){
-            const item = this.filterData.data[index]
-            this.coinItem = item
-            this.indexCoin = index
-            this.$refs.childDelete.showConfirmDelete()
-        },
-        actionDelete(item){
+        postRemoveUser(){
             this.isloading = true
-            ApiManager.deleteCoin(item).then((response)=>{
+            let item = this.filterData.data[this.itemToChange]
+            ApiManager.postRemoveCustomer(item).then((response)=>{
                 this.isloading = false
-                    this.showToast(response.data.data.name+ ' deleted')
-                    this.filterData.data.splice(this.indexCoin,1)
-                    this.$refs.childDelete.showConfirmDelete()
+                this.filterData.data.splice(this.itemToChange,1)
+                this.filterData.total -= 1
+                this.showToast('Pelanggan terhapus')
             }).catch((error)=>{
-                 this.isloading = false
                 console.log(error)
+                this.isloading = false
+            })
+        },
+        updateCustomer(){
+            this.isloading = true
+            ApiManager.postUpdateCustomer(this.userItem).then((response)=>{
+                this.isloading = false
+                if(response.data==0){
+                this.filterData.data.splice(this.itemToChange,1,response.data.data)
+                this.showToast('User Updated')
+                window.location.href="#"
+                }
+            }).catch((error)=>{
+                console.log(error)
+                this.isloading = false
             })
         }
+
     }
 }
 </script>
-<style scoped>
- .searchbar{
-    margin-bottom: auto;
-    margin-top: auto;
-    height: 60px;
-    background-color: #353b48;
-    border-radius: 30px;
-    padding: 10px;
-    }
-
-    .search_input{
-    color: white;
-    border: 0;
-    outline: 0;
-    background: none;
-    width: 0;
-    caret-color:transparent;
-    line-height: 40px;
-    transition: width 0.4s linear;
-    }
-
-    .searchbar:hover > .search_input{
-    padding: 0 10px;
-    width: 450px;
-    caret-color:red;
-    transition: width 0.4s linear;
-    }
-
-    .searchbar:hover > .search_icon{
-    background: white;
-    color: #e74c3c;
-    }
-    .search_icon{
-    height: 40px;
-    width: 40px;
-    float: right;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-    color:white;
-    text-decoration:none;
-    }
-</style>

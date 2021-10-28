@@ -36,11 +36,12 @@ class CustomerController extends BaseApiController
         $data->name = $request->name;
         $data->adress = $request->adress;
         $data->phone = $request->phone;
-       // $data->extra_price = $request->extra_price;
+        $data->port = $request->port;
         $data->discount = $request->discount;
-       // $data->shared_user = $request->shared_user;
+        $data->connection = $request->connection;
         $data->server_id = $request->server_id;
         $data->network_id = $request->network_id;
+        $data->parent_id = $request->parent_id;
         $data->status = $request->status;
 
         if ($request->hasFile('photo')) {
@@ -54,8 +55,9 @@ class CustomerController extends BaseApiController
                $customerMembers->push(
                    new CustomerMember([
                     'name' => $row['name'],
-                    'password' => $row['password'],
-                    'extra_price' => $row['extra_price']
+                    'password' => $row['password'] ?? '',
+                    'extra_price' => $row['extra_price'] ?? 0,
+                    'note' => $row['note'] ?? ''
                ])
                 );
             }
@@ -72,11 +74,12 @@ class CustomerController extends BaseApiController
         $data->name = $request->name;
         $data->adress = $request->adress;
         $data->phone = $request->phone;
-        //$data->extra_price = $request->extra_price;
+        $data->port = $request->port;
         $data->discount = $request->discount;
-        //$data->shared_user = $request->shared_user;
+        $data->connection = $request->connection;
         $data->server_id = $request->server_id;
         $data->network_id = $request->network_id;
+        $data->parent_id = $request->parent_id;
         $data->status = $request->status;
 
         if ($request->hasFile('photo')) {
