@@ -43,7 +43,7 @@ class CustomerController extends Controller
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $customer = Customer::with('customerMember')->where('id',$id)->first();
         return Inertia::render('Backend/CustomerMemberList',[
-            'appname' => 'Daftar Anggota '. $customer->name,
+            'appname' => 'Detail Pelanggan '. $customer->name,
             'title' => 'Anggota '.$customer->name,
             'customer' => $customer
         ]);

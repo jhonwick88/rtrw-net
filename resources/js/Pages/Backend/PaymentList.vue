@@ -4,10 +4,7 @@
 <div class="col-12">
 <div class="card">
     <div class="card-header">
-	<h3><i class=" fa fa-user"></i> {{ $page.props.appname }}
-        <span style="font-size: 14px">
-                 &nbsp; | &nbsp; <a :href="route('be.admin.networks.create')" title="Tambah Jaringan"><i class="fa fa-user-plus"></i> Tambah</a>
-        </span>&nbsp;&nbsp;
+	<h3><i class=" fa fa-user"></i> {{ $page.props.appname }}&nbsp;&nbsp;
         <small id="loader" v-if="isloading"><i><i class="fa fa-circle-o-notch fa-spin"></i> Processing... </i></small></h3>
 </div>
 <div class="card-body">
@@ -19,6 +16,20 @@
                  <input type="text" class="form-control" v-model="query" placeholder="Pencarian..." style="float:left; margin-top: 6px; max-width: 150px;">
                  <button name="help" class="btn bg-primary" onclick="location.href='#help';" title="Help"><i class="fa fa-question"></i> Info</button>
 		</div>
+        <!-- filter -->
+        <div class="input-group mr-b-10">
+            <div class="input-group-2 col-box-4">
+			<select style="padding:5px;" class="group-item group-item-md" title="Month" v-model="filter.month" @change="switchMonth($event)">
+        			<option :value="index" v-for="(item,index) in $page.props.filters.months" :key="index">{{ item }}</option>
+            </select>
+			</div>
+			<div class="input-group-2 col-box-3">
+			<select style="padding:5px;" class="group-item group-item-md" title="Year" v-model="filter.year" @change="switchYear($event)">
+        			<option :value="index" v-for="(item,index) in $page.props.filters.years" :key="index">{{ item }}</option>
+            </select>
+			</div>
+        </div>
+        <!-- end filter -->
 </div>
 <!-- pagination -->
 <div class="col-12 align-middle text-center" v-if="filterData.last_page > 1">
@@ -42,33 +53,43 @@
 			<table class="table table-bordered table-hover text-nowrap">
 				<thead class="thead-light">
 				<tr>
-				  <th colspan="5">{{ $page.props.title }}<b style="font-size:0;">,,,,</b></th>
+				  <th colspan="6">{{ $page.props.title }} {{ $page.props.filters.months[filter.month]+' '+filter.year }}<b style="font-size:0;">,,,,</b></th>
 				  <th style="text-align:right;">Total</th>
-				  <th style="text-align:right;" id="total">{{ filterData.total }}</th>
+				  <th style="text-align:right;" id="total">{{ getTotal() }}</th>
 				</tr>
 				<tr>
 				  <th class="text-center">№</th>
 					<th class="pointer" title="Click to sort" @click="sort('name')"><i class="fa fa-sort"></i> Nama</th>
-					<th class="pointer" title="Click to sort" @click="sort('rate_limit')"><i class="fa fa-sort"></i> Rate Limit</th>
-					<th class="pointer" title="Click to sort" @click="sort('price')"><i class="fa fa-sort"></i> Harga</th>
 					<th class="pointer" title="Click to sort" @click="sort('network_type')"><i class="fa fa-sort"></i> Tipe</th>
-					<th class="pointer" title="Click to sort" @click="sort('created_at')"><i class="fa fa-sort"></i> Dibuat tgl</th>
+					<th class="pointer" title="Click to sort" @click="sort('total_payment')"><i class="fa fa-sort"></i> Total</th>
+                    <th>Tgl Bayar</th>
+                    <th>Kolektor</th>
+                    <th>Status</th>
+					<!-- <th class="pointer" title="Click to sort" @click="sort('updated_at')"><i class="fa fa-sort"></i> Update tgl</th> -->
 					<th>Aksi</th>
 				</tr>
 				</thead>
 				<tbody>
                     <tr v-for="(item,index) in filterData.data" :key="index">
       <th class="align-middle text-center">
-          <i class="fa fa-minus-square text-danger pointer" @click="remove(index)"></i> &nbsp;&nbsp;
+          <!-- <i class="fa fa-minus-square text-danger pointer" @click="remove(index)"></i> &nbsp;&nbsp; -->
+          <!-- <i class="fa fa-minus-square text-danger pointer" @click="remove(index)"></i> &nbsp;&nbsp; -->
           {{ filterData.from+index }}
       </th>
-      <td>{{ item.name }}</td>
-      <td>{{ item.rate_limit }}</td>
-      <td>{{ item.price }}</td>
-      <td>{{ item.network_type_label }}</td>
-      <td>{{ item.updated_at }}</td>
+      <td><a :title="`Open ${item.name}`" :href="route('be.admin.customers.member',item.id)"><i class="fa fa-edit"></i> {{ item.name }} </a></td>
+      <td>{{ item.network_type }}</td>
+      <td style="text-align:right;"> {{ item.payment.length > 0 ? getStatus(item.payment[0]).total_payment : item.total_payment }}</td>
+      <td>{{ item.payment.length > 0 ? getStatus(item.payment[0]).pay_date : '' }}</td>
+      <td>{{ item.payment.length > 0 ? item.payment[0].collector: '' }}</td>
+      <td class="text-center">{{ item.payment.length > 0 ? getStatus(item.payment[0]).status : 'UNPAID' }}</td>
+      <!-- <td>{{ item.payment.length > 0 ? item.payment[0].updated_at : item.updated_at }}</td> -->
    <td>
-    <a class="btn bg-primary" href="javascript:" @click="editUser(index)">Edit</a>
+       <div v-if="item.payment.length > 0">
+            <a class="btn bg-primary" href="javascript:" @click="makePay(index)" v-if="getStatus(item.payment[0]).unpaid == 2">Bayar</a>
+       </div>
+       <div v-else>
+           <a class="btn bg-primary" href="javascript:" @click="makePay(index)">Bayar</a>
+       </div>
 </td>
     </tr>
 				</tbody>
@@ -82,7 +103,7 @@
       </template>
       <template #content>
           <b>Penting</b><br>
-        - Mengubah tipe jaringan dari PPPOE ke VOUCHER atau sebaliknya akan berdampak terhadap Pembayaran pelanggan anda!
+        -
       </template>
 
       <template #footer>
@@ -95,34 +116,57 @@
     <!-- edit modal -->
      <jet-confirmation-modal id="edit">
      <template #title>
-        Edit {{networkItem.name}}
+        Form Pembayaran Pelanggan {{paymentItem.name}}
       </template>
       <template #content>
        <table class="table">
   <tbody>
   <tr>
-    <td class="align-middle">Nama</td><td><input class="form-control" type="text" autocomplete="off" autofocus="" v-model="networkItem.name"></td>
-  </tr>
-    <tr>
-    <td class="align-middle">Rate Limit</td><td><input class="form-control" type="text" v-model="networkItem.rate_limit"></td>
-  </tr>
-    <tr>
-    <td class="align-middle">Price</td><td><input class="form-control" type="number" v-model="networkItem.price"></td>
-  </tr>
-  <tr>
-    <td class="align-middle">Tipe</td><td>
-       <select class="form-control" v-model="networkItem.network_type">
-           <option v-for="(tipe,index) in types" :key="index" :value="tipe.id">{{ tipe.name}}</option>
+     <td class="align-middle">Nama</td><td>
+       <select class="form-control" v-model="paymentItem.customer_id" disabled>
+           <option v-for="(customer,index) in filterData.data" :key="index" :value="customer.id">{{ customer.name}}</option>
        </select>
     </td>
   </tr>
+  <tr>
+     <td class="align-middle">Bulan</td><td>
+       <select class="form-control" v-model="paymentItem.month" disabled>
+           <option v-for="(item,index) in $page.props.filters.months" :key="index" :value="index">{{ item }}</option>
+       </select>
+    </td>
+  </tr>
+  <tr>
+     <td class="align-middle">Tahun</td><td>
+       <select class="form-control" v-model="paymentItem.year" disabled>
+           <option v-for="(item,index) in $page.props.filters.years" :key="index" :value="index">{{ item }}</option>
+       </select>
+    </td>
+  </tr>
+    <tr>
+    <td class="align-middle">Total Bayar</td><td><input class="form-control" type="number" v-model="paymentItem.total" disabled></td>
+  </tr>
+    <tr>
+    <td class="align-middle">Status</td><td>
+       <select class="form-control" v-model="paymentItem.status" disabled>
+           <option v-for="(status,index) in payStatus" :key="index" :value="status.id" >{{ status.name}}</option>
+       </select>
+    </td>
+  </tr>
+  <tr>
+     <td class="align-middle">Metoda Pembayaran</td><td>
+       <select class="form-control" v-model="paymentItem.payment_method_id">
+           <option v-for="(method,index) in $page.props.methods" :key="index" :value="method.id">{{ method.name }}</option>
+       </select>
+    </td>
+  </tr>
+
   </tbody>
        </table>
       </template>
 
       <template #footer>
-        <button class="btn bg-danger" @click="updateItem">
-          Simpan
+        <button class="btn bg-danger" @click="payItem">
+          Bayar
         </button>
       </template>
     </jet-confirmation-modal>
@@ -154,13 +198,22 @@ export default {
             isloading: false,
             query:'',
             itemToChange: null,
-            networkItem:{
-                name:'',
-                rate_limit:'',
-                price:0,
-                network_type:1
+            filter:{
+                month: this.$page.props.default.month,
+                year: this.$page.props.default.year,
+                all:1,
+                q: ''
             },
-            types:[{id:1,name:'PPPOE'},{id:2,name:'VOUCHER'}],
+            paymentItem:{
+                name: '',
+                customer_id: null,
+                month: this.$page.props.default.month,
+                year: this.$page.props.default.year,
+                total: 0,
+                status: 2,
+                payment_method_id: null
+            },
+            payStatus:[{id:1,name:'PAID'},{id:2,name:'UNPAID'}],
             action:{
                 title:'',
                 message:'',
@@ -169,15 +222,12 @@ export default {
         }
     },
     created() {
-        this.getFilterData(1)
+        this.getFilterData(this.filter)
     },
     watch: {
         query: function(newVal) {
-            if (newVal.length >2) {
-                this.searchResults();
-            }else{
-                this.getFilterData(1)
-            }
+            this.filter.q = newVal.length > 2 ? newVal : ''
+            this.getFilterData(this.filter)
         }
     },
     methods: {
@@ -189,94 +239,86 @@ export default {
       }
       this.filterData.data.sort(this.sortBy(col,this.currentSortDir));
     },
-        getFilterData(page){
+    switchMonth(event){
+        this.filter.month = event.target.value
+        this.getFilterData(this.filter)
+    },
+    switchYear(event){
+        this.filter.year = event.target.value
+        this.getFilterData(this.filter)
+    },
+    getTotal(){
+        let total = 0
+        if(this.filterData.data.length > 0){
+        this.filterData.data.forEach((item)=>{
+            total += item.total_payment
+        });
+        }
+        return 'Rp.  '+total.toString().replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1\.")
+    },
+        getFilterData(filter){
             this.isloading = true
-            ApiManager.getNetworks(page)
+            ApiManager.getPayments(filter)
                 .then((response) => {
                     this.isloading = false
                     this.filterData = response.data.data
-                    //console.log(this.coinsby)
                 })
                 .catch((error) => {
                     console.log(error);
                 });
         },
-        getPage(page){
-             if(!page.includes('&'))
-              this.getFilterData(page)
+        getPage(filter){
+             if(!filter.includes('&'))
+              this.getFilterData(filter)
         },
-        searchResults(){
-            this.isloading = true
-            ApiManager.getSearchNetworks(this.query).then((response)=>{
-                this.isloading = false
-                this.filterData = response.data.data
-            }).catch((error)=>{
-                this.isloading = false
-                console.log(error)
-            })
-        },
-        remove(index){
-            let item = this.filterData.data[index]
-            this.action.title = `Hapus Jaringan ${item.name}`
-            this.action.message = `Data yang sudah dihapus tidak dapat dikembalikan`
-            this.action.option = 'remove'
-            this.itemToChange = index
-            this.showAlert()
-        },
-        editUser(index){
+        makePay(index){ // make new pay data to paid
             let item = this.filterData.data[index]
             this.itemToChange = index
-            this.networkItem = item
+            this.paymentItem = {
+                name: item.name,
+                customer_id: item.id,
+                month: this.filter.month,
+                year: this.filter.year,
+                total: item.total_payment,
+                status: 1,
+                payment_method_id: null
+            }
             location.href='#edit'
         },
-        showAlert(){
-                this.$swal.fire({
-                title: this.action.title,
-                text: this.action.message,
+        getStatus(payment){
+            return {
+                status: payment.status == 1 ? 'PAID' : 'UNPAID',
+                total_payment: payment.status == 1 ? payment.total : 0,
+                pay_date: payment.status == 1 ? payment.pay_date: '',
+                unpaid: payment.status == 2 ? 2 : 1
+            }
+        },
+
+        payItem(){
+           // console.log(JSON.stringify(this.paymentItem))
+            this.$swal.fire({
+                title: 'Bayar Tagihan Pelanggan '+ this.paymentItem.name,
+                text: 'Anda setuju untuk membayar tagihan internet dan aksi ini tidak dapat dikembalikan, kamu yakin?',
                 showCancelButton: true,
                 confirmButtonText: 'Ya',
                 cancelButtonText: `Batal`,
-                }).then((result) => {
-                if (result.isConfirmed) {
-                    this.updateUserAction()
-                    //this.$swal.fire('Saved!', '', 'success')
-                } else{
-                    this.itemToChange = null
-                }
+            }).then((result) => {
+                this.isloading = true
+                ApiManager.postAddPayment(this.paymentItem).then((response)=>{
+                    this.isloading = false
+                    if(response.data.code ==0){
+                        this.filterData.data[this.itemToChange].payment.push(response.data.data)
+                        this.$swal.fire('Pembayaran Sukses!', '', 'success')
+                        window.location.href="#"
+                    }else{
+                        this.showToast(response.data.message)
+                    }
+                }).catch((error)=>{
+                    console.log(error)
+                    this.isloading = false
                 })
-        },
-        updateUserAction(){
-if(this.action.option == 'remove'){
-                return this.postRemoveItem()
-            }
-        },
-        postRemoveItem(){
-            this.isloading = true
-            let item = this.filterData.data[this.itemToChange]
-            ApiManager.postRemoveNetwork(item).then((response)=>{
-                this.isloading = false
-                this.filterData.data.splice(this.itemToChange,1)
-                this.filterData.total -= 1
-                this.showToast('Jaringan terhapus')
-            }).catch((error)=>{
-                this.showToast('Oops hapus dulu data pelanggan di server ini')
-                //console.log('error '+error)
-                this.isloading = false
             })
-        },
-        updateItem(){
-            this.isloading = true
-            ApiManager.postUpdateNetwork(this.networkItem).then((response)=>{
-                this.isloading = false
-                if(response.data.code ==0){
-                    this.filterData.data.splice(this.itemToChange,1,response.data.data)
-                    this.showToast('Jaringan Updated')
-                    window.location.href="#"
-                }
-            }).catch((error)=>{
-                console.log(error)
-                this.isloading = false
-            })
+
         }
 
     }

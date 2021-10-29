@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\Api\AddPaymentRequest;
 use App\Models\Payment;
 use App\Models\Customer;
-
+use DB;
 
 class PaymentController extends BaseApiController
 {
@@ -42,15 +42,29 @@ class PaymentController extends BaseApiController
 
     public function store(AddPaymentRequest $request)
     {
-        $data = new Payment();
-        $data->month = $request->month;
-        $data->pay_date = $request->pay_date;
-        $data->total = $request->total;
-        $data->user_id = $request->user()->id;
-        $data->payment_method_id = $request->payment_method_id;
-        $data->customer_id = $request->customer_id;
-        $data->status = $request->status;
-        $data->saveOrFail();
+        try{
+            DB::beginTransaction();
+            $data = Payment::updateOrCreate(
+                [
+                    'customer_id' => $request->customer_id,
+                    'month' => $request->month,
+                    'year' => $request->year,
+                ],
+                [
+                    'pay_date' => \Carbon\Carbon::now(),
+                    'total' => $request->total,
+                    'status'=>$request->status,
+                    'user_id' => $request->user()->id,
+                    'payment_method_id' => $request->payment_method_id,
+                ]
+            );
+
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+
+            return $this->failedResponse($th->getMessage());
+        }
         $data->refresh();
         $data->load(['customer','user','paymentMethod']);
         return $this->successResponse($data);
@@ -85,9 +99,14 @@ class PaymentController extends BaseApiController
         $query = Customer::query()->with(['payment' => function($q) use ($request){
             //$q->with('network');
             //if ($request->has('q')) {
-                $searchTerm = \Carbon\Carbon::now();
-                $q->where('month', $searchTerm->month);
-                $q->where('year', $searchTerm->year);
+
+                if($request->has('month')){
+                    $q->where('month', $request->month);
+                }
+                if($request->has('year')){
+                    $q->where('year', $request->year);
+                }
+                $q->where('status', 1);
                 $q->orderBy('created_at','desc');
             //}
         },'network','server','customerMember']);

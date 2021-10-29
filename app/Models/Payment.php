@@ -9,13 +9,14 @@ class Payment extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'month',
         'pay_date',
         'total',
         'user_id',
         'payment_method_id',
         'customer_id',
         'status',
+        'month',
+        'year'
     ];
     protected $appends = ['collector'];
 
@@ -33,6 +34,31 @@ class Payment extends Model
     public function paymentMethod()
     {
         return $this->belongsTo(PaymentMethod::class);
+    }
+    public static function monthsList(){
+        return [
+            1 => 'Januari',
+            2 => 'Februari',
+            3 => 'Maret',
+            4 => 'April',
+            5 => 'Mei',
+            6 => 'Juni',
+            7 => 'Juli',
+            8 => 'Agustus',
+            9 => 'September',
+            10 => 'Oktober',
+            11 => 'November',
+            12 => 'Desember'
+        ];
+    }
+    public static function yearsList(){
+        return [
+            2021 => '2021',
+            2022 => '2022',
+            2023 => '2023',
+            2024 => '2024',
+            2025 => '2025'
+        ];
     }
 
 }

@@ -175,13 +175,8 @@ export default{
     postAddPaymentMethod(data){
         return axios.post(`${baseUrl}/payment-method/store`,data)
     },
-    getPayments(page = 1){
-    return axios.get(`${baseUrl}/payment/index`, {
-        params:{
-            page: page,
-            limit: 10,
-        }
-        });
+    getPayments(filters){
+        return axios.get(`${baseUrl}/payment/index`, {params:filters});
     },
     getSearchPayments(query){
         return axios.get(`${baseUrl}/payment/index`, {

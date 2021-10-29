@@ -65,7 +65,7 @@
           <i class="fa fa-minus-square text-danger pointer" @click="remove(index)"></i> &nbsp;&nbsp;
           {{ filterData.from+index }}
       </th>
-      <td>{{ item.name }}</td>
+      <td><a :title="`Open ${item.name}`" :href="route('be.admin.customers.member',item.id)"><i class="fa fa-edit"></i> {{ item.name }} </a></td>
       <td>{{ item.adress }}</td>
       <td>{{ item.phone }}</td>
       <td>{{ item.server.location }}</td>
@@ -74,7 +74,7 @@
       <td>{{ item.connection }}</td>
       <td>{{ item.port }}</td>
    <td>
-        <a class="btn bg-warning" :href="`customers/member/${item.id}`" v-show="item.network_type=='VOUCHER'">Anggota</a>
+
     <a class="btn bg-primary" href="javascript:" @click="editUser(index)">Edit</a>
 </td>
     </tr>

@@ -5,7 +5,7 @@
 <div class="card">
     <div class="card-header">
 	<h3><i class=" fa fa-user"></i> {{ $page.props.appname }}
-        <span style="font-size: 14px">
+        <span style="font-size: 14px" v-if="$page.props.customer.network_type == 'VOUCHER'">
                  &nbsp; | &nbsp; <a href="javascript:" title="Tambah Member" @click="tambahUser"><i class="fa fa-user-plus"></i> Tambah</a>
                  &nbsp; | &nbsp; <a :href="route('be.admin.customers')" title="kembali ke pelanggan"><i class="fa fa-arrow-circle-left"></i> Kembali</a>
         </span>&nbsp;&nbsp;
@@ -59,7 +59,7 @@
 </div>
 <!-- end header table -->
 <!-- start table -->
-		  <div class="overflow mr-t-10 box-bordered" style="max-height: 75vh">
+		  <div class="overflow mr-t-10 box-bordered" style="max-height: 75vh" v-if="$page.props.customer.network_type == 'VOUCHER'">
 			<table class="table table-bordered table-hover text-nowrap">
 				<thead class="thead-light">
 				<tr>
