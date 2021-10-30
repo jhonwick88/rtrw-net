@@ -25,6 +25,9 @@ Route::group(['middleware'=>['auth:sanctum'],'namespace' => 'Api'], function () 
         Route::delete('destroy/{id}','UserController@destroy')->name('api.user.destroy');
     });
     Route::post('/logout', 'AuthController@logout')->name('api.auth.logout');
+    Route::group(['prefix' => 'dashboard'], function () {
+        Route::get('index','DashboardController@index')->name('api.dashboard.index');
+    });
     //Customer
     Route::group(['prefix' => 'customer'], function () {
         Route::get('index','CustomerController@index')->name('api.customer.index');//->withoutMiddleware('auth:sanctum');

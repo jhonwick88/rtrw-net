@@ -55,6 +55,7 @@ class SettingController extends BaseApiController
     public function baseQuery($request)
     {
         $query = SettingGroup::query()->with(['setting']);
+        $query->where('status',1);//aktif
         if ($request->has('key')) {
             $key = $request->key;
             $query->whereHas('setting', function ($childQuery) use ($key) {
@@ -118,7 +119,7 @@ class SettingController extends BaseApiController
             $query->value = $image['name'];
         }else{
             $query->value = $request->value;
-        }        
+        }
         $query->save();
         return $this->successResponse($query);
     }

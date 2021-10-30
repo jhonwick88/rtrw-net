@@ -1,5 +1,5 @@
 <template>
-    <app-layout :title="$page.props.appname" :isloader="isloader">
+    <app-layout :title="$page.props.appname" :isloader="isloading">
         <!-- start content -->
           <div class="row justify-content-center my-5">
     <!-- <div class="col-md-12">
@@ -8,11 +8,11 @@
            <!-- start setting -->
                 <div class="row">
                 <div class="col-6" v-for="(settingmain,index) in settings" :key="index">
-                        <div class="card shadow rounded m-1 p-4" style="position: relative">
-                                <div class="d-flex justify-content-start border-bottom mb-4">
+                        <div class="card pd-10" style="position: relative">
+                                <div class="mr-b-10 pd-b-10 spa">
                                 <div><strong>{{settingmain.name}}</strong> &nbsp;<small><i>{{settingmain.description}}</i></small></div>
                                 </div>
-                                <div class="row" v-for="(child,x) in settingmain.setting" :key="x">
+                                <div class="row mr-b-8" v-for="(child,x) in settingmain.setting" :key="x">
                                 <div class="col-4">
                                         <label :for="child.key">{{child.label}}</label>
                                 </div>
@@ -28,10 +28,10 @@
                                 </div>
                                 <div class="col-8 mt-2 text-center" v-if="child.type == 'image'">
                                    <input type="file" :ref="`myFile${x}`" @change="updatePhotoPreview(x,child)" accept="image/*" hidden>
-                                    <div class="photo mt-3" v-show="imgpreview" @click="uploadImage(x)" role="button" style="max-width:20%">
+                                    <div class="photo mr-t-3 pointer radius-5" v-show="imgpreview" @click="uploadImage(x)" role="button" style="max-width:20%">
                                         <img :src="imgpreview" class="img-fluid sfdsf"/>
                                     </div>
-                                    <div class="photo mt-3" v-show="!imgpreview" @click="uploadImage(x)" role="button" style="max-width:20%">
+                                    <div class="photo mr-t-3 pointer radius-5" v-show="!imgpreview" @click="uploadImage(x)" role="button" style="max-width:20%">
                                         <img :src="child.value" class="img-fluid"/>
                                     </div>
                                 </div>

@@ -6,15 +6,9 @@
       <meta name="csrf-token" content="{{ csrf_token() }}">
       <meta content="Konten keyword" name="keywords">
         <link href="{{ asset('css/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
-        <!-- <link rel="stylesheet" href="{{ mix('css/app.css') }}"> -->
         <link href="{{ asset('css/mikhmon-ui.dark.min.css') }}" rel="stylesheet">
-        <!-- <link href="{{ asset('/resto/vendor/icofont/icofont.min.css') }}" rel="stylesheet">
-        <link href="{{ asset('/resto/vendor/boxicons/css/boxicons.min.css') }}" rel="stylesheet"> -->
-
         @routes
         <script src="{{ asset('js/jquery.min.js')}}"></script>
-
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.26.0/moment.min.js"></script>
         <script src="{{ mix('js/app.js') }}" defer></script>
     </head>
     <body>

@@ -25,30 +25,8 @@ axios.interceptors.response.use(function (response) {
 export const baseUrl = process.env.MIX_API_PATH;
 
 export default{
-    getPromoted(filter = 'today'){
-        return axios.get(`${baseUrl}/coin/index`,{
-          params: {
-            status: filter,
-            pr: 1
-          }
-        });
-    },
-    getFiltersCoins(page = 1, filter ='today'){
-      return axios.get(`${baseUrl}/coin/index`, {
-          params:{
-            page: page,
-            limit: 10,
-            status: filter
-          }
-        });
-    },
-    getSearchResult(query){
-      return axios.get(`${baseUrl}/coin/index`, {
-          params:{
-            all: 1,
-            q: query
-          }
-        });
+    getDashboard(){
+        return axios.get(`${baseUrl}/dashboard/index`);
     },
     getUsers(page = 1){
       return axios.get(`${baseUrl}/user/index`, {
