@@ -5,6 +5,7 @@
          </template>
     </app-layout>
 </template>
+
 <script>
 import AppLayout from '@/Layouts/AppLayoutNet'
 import Welcome from '@/Jetstream/WelcomeNet'
