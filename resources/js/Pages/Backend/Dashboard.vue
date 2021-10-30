@@ -31,7 +31,7 @@ import ApiManager from '../API/ApiManager'
         },
         methods: {
             getDataRekap(){
-                  this.isloading = true
+            this.isloading = true
             ApiManager.getDashboard()
                 .then((response) => {
                     this.isloading = false
