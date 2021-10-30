@@ -44,7 +44,7 @@
       </div>
 <!-- end row top -->
 <!-- start row middle -->
-<div class="row">
+<div class="row" v-if="this.$page.props.isAdmin">
           <div class="col-8">
             <div id="r_2" class="row"><div id="r_2" class="card">
               <div class="card-header"><h3><i class="fa fa-wifi"></i> System</h3></div>

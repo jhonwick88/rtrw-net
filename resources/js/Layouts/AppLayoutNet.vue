@@ -40,7 +40,7 @@
         </div>
         <!-- end navbar -->
         <!-- sidenav -->
-        <div id="sidenav" class="sidenav">
+        <div id="sidenav" class="sidenav" v-if="this.$page.props.isAdmin">
           <div class="menu text-center align-middle card-header" style="border-radius:0;">
             <h3>PAYMENTS</h3>
           </div>
@@ -120,9 +120,19 @@
           <!--about-->
           <jet-nav-link :href="route('be.admin.about')" :active="route().current('be.admin.about')">
             <i class="fa fa-info-circle"></i> About
+            <!-- {{ $page.props.user.roles[0].title  }} -->
             </jet-nav-link>
         </div>
         <!-- end sidenav -->
+        <!-- start user -->
+         <div id="sidenav" class="sidenav" v-else>
+          <div class="menu text-center align-middle card-header" style="border-radius:0;">
+            <h3>PAYMENTS</h3>
+          </div>
+             <jet-nav-link :href="route('be.admin.payments')" :active="route().current('be.admin.dashboard')">
+            <i class="nav-icon fa fa-money"></i> Laporan </jet-nav-link>
+         </div>
+        <!-- end user -->
         <!-- main -->
         <div id="main">
             <loader v-if="isloader" object="#ff9633" color1="#ffffff" color2="#17fd3d" size="5" speed="2" bg="#343a40" objectbg="#999793" opacity="80" disableScrolling="false" name="box"></loader>
@@ -177,6 +187,7 @@ export default {
        }
 
     setInterval(() => this.updateCurrentTime(), 1 * 1000);
+    console.log('Settings '+JSON.stringify(this.$page.props))
 
   },
   methods: {
@@ -192,6 +203,9 @@ export default {
       }, {
         preserveState: false
       })
+    },
+    isAdmin(){
+       // return this.$page.props.user.roles[0].title == 'Admin'
     },
     checkCurrentRoute(){
         let active = false

@@ -26,7 +26,7 @@ class PaymentController extends Controller
     }
     public function index()
     {
-        abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        // abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $methods = PaymentMethod::select('id','name')->where('status',1)->get();
         return Inertia::render('Backend/PaymentList',[
             'appname' => 'Daftar Laporan Pembayaran',
