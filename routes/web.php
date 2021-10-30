@@ -16,7 +16,6 @@ use Illuminate\Http\Request;
 |
 */
 Route::post('/loginstore','Frontend\LoginController@store')->name('login.auth.post');
-
 Route::group(['namespace' => 'Frontend'], function () {
     Route::get('/','LandingpageController@snipper')->name('home.index');
 
