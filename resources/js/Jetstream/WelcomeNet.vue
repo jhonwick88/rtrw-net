@@ -43,6 +43,7 @@
           </div>
       </div>
 <!-- end row top -->
+
 <!-- start row middle -->
 <div class="row" v-if="this.$page.props.isAdmin">
           <div class="col-8">
