@@ -17,7 +17,7 @@ Route::group(['namespace' => 'Frontend'], function () {
 Route::group(['namespace' => 'Backend'], function () {
     // Route::get('/template', 'LoginController@template')->name('be.admin.template');
     Route::get('/wp-admin', 'LoginController@login')->name('be.admin.login');
-    Route::group(['middleware' => 'auth','prefix' => 'admin'], function () {
+    Route::group(['middleware' => 'auth:sanctum','prefix' => 'admin'], function () {
         Route::get('/', 'DashboardController@index')->name('be.admin');
         Route::get('/dashboard', 'DashboardController@index')->name('be.admin.dashboard');
         Route::group(['prefix' => 'users'], function(){

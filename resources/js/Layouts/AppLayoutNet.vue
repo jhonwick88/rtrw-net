@@ -187,7 +187,7 @@ export default {
        }
 
     setInterval(() => this.updateCurrentTime(), 1 * 1000);
-    console.log('Settings '+JSON.stringify(this.$page.props))
+    //console.log('Settings '+JSON.stringify(this.$page.props))
 
   },
   methods: {
