@@ -182,7 +182,7 @@ export default {
   },
     created() {
        this.resultConfig(usePage().props.value.settings)
-       
+
   },
   methods: {
     switchToTeam(team) {
@@ -192,13 +192,14 @@ export default {
         preserveState: false
       })
     },
+
      resultConfig: function(data){
           const result = data.reduce(
               (accumulator, target) => ({ ...accumulator, [target.key]: target.value }),
               {});
               let site_names = result.site_name.split(" ")
               this.setting = Object.assign(result,{'site_1': site_names[0],'site_2': site_names[1]})
-             //console.log('Settings '+JSON.stringify(this.setting))  
+             //console.log('Settings '+JSON.stringify(this.setting))
       },
 
     logout() {
