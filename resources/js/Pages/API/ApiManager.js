@@ -236,6 +236,9 @@ export default{
     postSubmitUser(data){
         return axios.post(`${baseUrl}/user/store`,data)
       },
+      postUpdateUser(data){
+        return axios.put(`${baseUrl}/user/update-data/${data.id}`,data);
+      },
     getSettings(){
       return axios.get(`${baseUrl}/setting/index`, {
           params:{
