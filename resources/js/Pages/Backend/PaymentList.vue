@@ -11,7 +11,7 @@
      <!-- content here -->
 <!-- header table -->
 <div class="row">
-<div class="col-12 mr-b-10">
+<div class="col-8 mr-b-10">
     		<div style="padding-bottom: 5px; padding-top: 5px;">
                  <input type="text" class="form-control" v-model="query" placeholder="Pencarian..." style="float:left; margin-top: 6px; max-width: 150px;">
                  <button name="help" class="btn bg-primary" onclick="location.href='#help';" title="Help"><i class="fa fa-question"></i> Info</button>
@@ -31,6 +31,22 @@
         </div>
         <!-- end filter -->
 </div>
+<!-- report side -->
+<div class="col-4 mr-b-10">
+<div class="box-bordered bg-dark" v-if="this.$page.props.isAdmin">
+<table class="table">
+    <tbody>
+  <tr>
+    <td class="align-middle">Lunas</td><td style="text-align:right;">{{ getTotal().totalBayar }}</td></tr>
+  <tr style="border-bottom: 1px solid;">
+    <td class="align-middle">Belum Bayar</td><td style="text-align:right;">{{ getTotal().belumBayar }}</td></tr>
+      <tr>
+    <td class="align-middle">Total</td><td style="text-align:right;"><strong>{{ getTotal().total }} </strong></td></tr>
+    </tbody>
+</table>
+</div>
+</div>
+<!-- end report side -->
 <!-- pagination -->
 <div class="col-12 align-middle text-center" v-if="filterData.last_page > 1">
     <div class="pagination">
@@ -54,8 +70,8 @@
 				<thead class="thead-light">
 				<tr>
 				  <th colspan="6">{{ $page.props.title }} {{ $page.props.filters.months[filter.month]+' '+filter.year }}<b style="font-size:0;">,,,,</b></th>
-				  <th style="text-align:right;">Total</th>
-				  <th style="text-align:right;" id="total">{{ getTotal() }}</th>
+				  <th style="text-align:right;">Total Data</th>
+				  <th style="text-align:right;" id="total">{{ filterData.total }}</th>
 				</tr>
 				<tr>
 				  <th class="text-center">№</th>
@@ -92,7 +108,9 @@
        </div>
 </td>
     </tr>
+
 				</tbody>
+
 			</table>
 		</div>
 <!-- end table -->
@@ -249,12 +267,24 @@ export default {
     },
     getTotal(){
         let total = 0
+        let totalBayar = 0
         if(this.filterData.data.length > 0){
         this.filterData.data.forEach((item)=>{
             total += item.total_payment
+            if(item.payment.length > 0){
+                if(item.payment[0].status==1) {//paid
+                    totalBayar += item.payment[0].total
+                }
+            }
         });
         }
-        return 'Rp.  '+total.toString().replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1\.")
+        let belumBayar = total - totalBayar
+        return {
+            total : 'Rp.  '+total.toString().replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1\."),
+            totalBayar : 'Rp.  '+totalBayar.toString().replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1\."),
+            belumBayar : 'Rp.  '+belumBayar.toString().replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1\.")
+
+        }
     },
         getFilterData(filter){
             this.isloading = true

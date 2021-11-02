@@ -22,6 +22,7 @@ class Customer extends Model
         'parent_id',
         'status',
     ];
+
     protected $appends = ['network_type','total_payment'];
 
     public function parent()
