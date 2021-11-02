@@ -29,10 +29,10 @@
                                 <div class="col-8 mt-2 text-center" v-if="child.type == 'image'">
                                    <input type="file" :ref="`myFile${x}`" @change="updatePhotoPreview(x,child)" accept="image/*" hidden>
                                     <div class="photo mr-t-3 pointer radius-5" v-show="imgpreview" @click="uploadImage(x)" role="button" style="max-width:20%">
-                                        <img :src="imgpreview" class="img-fluid sfdsf"/>
+                                        <img height="100" :src="imgpreview" class="img-fluid sfdsf"/>
                                     </div>
                                     <div class="photo mr-t-3 pointer radius-5" v-show="!imgpreview" @click="uploadImage(x)" role="button" style="max-width:20%">
-                                        <img :src="child.value" class="img-fluid"/>
+                                        <img height="100" :src="child.value" class="img-fluid"/>
                                     </div>
                                 </div>
                                 <div class="col-8 mt-2" v-if="child.type == 'textarea'">

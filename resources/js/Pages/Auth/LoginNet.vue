@@ -1,6 +1,6 @@
 <template>
     <inertia-head>
-        <title>{{ title }} - MyWebsite</title>
+        <title>{{ $page.props.appname }} - {{$page.props.setting_new.site_name}}</title>
     </inertia-head>
     <div>
         <!-- start -->
@@ -12,7 +12,7 @@
     </div>
     <div class="card-body">
       <div class="text-center pd-5">
-        <img :src="$page.props.setting_new.site_logo" :alt="`${$page.props.setting_new.site_name} Logo`">
+        <img :src="$page.props.setting_new.site_logo" height="100" :alt="`${$page.props.setting_new.site_name} Logo`">
       </div>
       <div class="text-center">
       <span style="font-size: 25px; margin: 10px;">{{ $page.props.setting_new.site_name }}</span>
@@ -70,7 +70,7 @@ export default {
     },
      props: {
     canResetPassword: Boolean,
-    status: String
+    status: String,
   },
 
   data() {
@@ -82,6 +82,9 @@ export default {
       })
     }
   },
+//   created() {
+//       console.log(this.$page.props)
+//   },
 
   methods: {
     submit() {
