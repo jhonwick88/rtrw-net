@@ -42,7 +42,7 @@
 			<table class="table table-bordered table-hover text-nowrap">
 				<thead class="thead-light">
 				<tr>
-				  <th colspan="8">{{ $page.props.title }}<b style="font-size:0;">,,,,</b></th>
+				  <th colspan="9">{{ $page.props.title }}<b style="font-size:0;">,,,,</b></th>
 				  <th style="text-align:right;">Total</th>
 				  <th style="text-align:right;" id="total">{{ filterData.total }}</th>
 				</tr>
@@ -54,8 +54,9 @@
 					<th class="pointer" title="Click to sort" @click="sort('server_id')"><i class="fa fa-sort"></i> Server</th>
 					<th class="pointer" title="Click to sort" @click="sort('network_type')"><i class="fa fa-sort"></i> Network</th>
 					<th>Kecepatan</th>
-					<th>Port</th>
-                    <th>Koneksi</th>
+					<th>Koneksi</th>
+                    <th>Port</th>
+                    <th>Diskon</th>
 					<th>Aksi</th>
 				</tr>
 				</thead>
@@ -73,6 +74,7 @@
       <td>{{ item.network.name }}</td>
       <td>{{ item.connection }}</td>
       <td>{{ item.port }}</td>
+      <td>{{ item.discount }}</td>
    <td>
 
     <a class="btn bg-primary" href="javascript:" @click="editUser(index)">Edit</a>
@@ -144,7 +146,9 @@
        </select>
     </td>
   </tr>
-
+ <tr>
+    <td class="align-middle">Diskon</td><td><input class="form-control" type="number" v-model="userItem.discount"></td>
+  </tr>
   </tbody>
        </table>
       </template>
@@ -196,7 +200,8 @@ export default {
                 network_type:'',
                 network_id:'',
                 connection:'',
-                parent_id:''
+                parent_id:'',
+                discount:0,
             },
             action:{
                 title:'',

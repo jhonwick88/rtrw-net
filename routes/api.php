@@ -22,6 +22,7 @@ Route::group(['middleware'=>['auth:sanctum'],'namespace' => 'Api'], function () 
         Route::get('index','UserController@index')->name('api.user.index');
         Route::post('store','AuthController@register')->name('api.user.store');
         Route::put('update/{id}','UserController@update')->name('api.user.update');
+        Route::put('update-data/{id}','UserController@updateData')->name('api.user.update.data');
         Route::delete('destroy/{id}','UserController@destroy')->name('api.user.destroy');
     });
     Route::post('/logout', 'AuthController@logout')->name('api.auth.logout');

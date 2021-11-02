@@ -70,16 +70,56 @@
       </td>
       <td class="text-center">{{item.is_active ? 'Active':'Blocked'}}</td>
    <td>
-       <div v-if="item.id != 1">
+
+       <div v-if="item.id != 1" style="display: inline;">
            <a class="btn bg-warning" href="javascript:" @click="switchActive(index)">{{ item.is_active ? 'Blocked' : 'Activated'}}</a>
     <a class="btn bg-danger" href="javascript:" @click="editUser(index)">Change Role</a>
        </div>
+                  <a class="btn bg-indigo" href="javascript:" @click="changeData(index)">Edit</a>
 </td>
     </tr>
 				</tbody>
 			</table>
 		</div>
 <!-- end table -->
+<!-- change Data -->
+   <jet-confirmation-modal id="edit">
+     <template #title>
+        Edit {{userItem.name}}
+      </template>
+      <template #content>
+       <table class="table">
+ <tbody>
+  <tr>
+    <td class="align-middle">Nama</td><td><input class="form-control" type="text" name="name"  v-model="userItem.name"></td>
+  </tr>
+    <tr>
+    <td class="align-middle">Email</td><td><input class="form-control" type="text" name="email"  v-model="userItem.email"></td>
+  </tr>
+  <tr>
+    <td class="align-middle">Sandi Baru</td><td>
+        <div class="input-group">
+          <div class="input-group-11 col-box-10">
+            <input class="group-item group-item-l" id="passUser" :type="`${showPassword ? 'text' : 'password'}`" name="pass" autocomplete="new-password" required="1" v-model="userItem.password_new">
+          </div>
+            <div class="input-group-1 col-box-2">
+              <div class="group-item group-item-r pd-2p5 text-center">
+              <input title="Show/Hide Password" type="checkbox" v-model="showPassword">
+            </div>
+            </div>
+        </div>
+		</td>
+  </tr>
+</tbody></table>
+      </template>
+
+      <template #footer>
+        <button class="btn bg-danger" @click="updateUser">
+          Simpan
+        </button>
+      </template>
+    </jet-confirmation-modal>
+<!-- end change data -->
     <!-- end content -->
      <jet-confirmation-modal id="help">
       <template #title>
@@ -126,13 +166,18 @@ export default {
             isloading: false,
             query:'',
             itemToChange: null,
-            userItem:null,
+            userItem:{
+                name: '',
+                email: '',
+                password_new: ''
+            },
             action:{
                 title:'',
                 message:'',
                 option:''
             },
             bootstrap: null,
+            showPassword: false,
         }
     },
     created() {
@@ -213,6 +258,12 @@ export default {
            this.showAlert()
             }
         },
+        changeData(index){
+            let item = this.filterData.data[index]
+            this.itemToChange = index
+            this.userItem = item
+            location.href='#edit'
+        },
         switchActive(index){
             let item = this.filterData.data[index]
             this.itemToChange = index
@@ -226,6 +277,22 @@ export default {
                 this.action.option = 'switch'
             }
             this.showAlert()
+        },
+            updateUser(){
+                this.isloading = true
+                ApiManager.postUpdateUser(this.userItem).then((response)=>{
+                    this.isloading = false
+                    if(response.data.code == 0){
+                    this.filterData.data.splice(this.itemToChange,1,response.data.data)
+                    this.showToast('User Updated')
+                    window.location.href="#"
+                }else{
+                    this.showToast(response.data.message)
+                }
+            }).catch((error)=>{
+                console.log(error)
+                this.isloading = false
+            })
         },
         showAlert(){
                         this.$swal.fire({

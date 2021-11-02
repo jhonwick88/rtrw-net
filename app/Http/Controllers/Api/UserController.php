@@ -4,14 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\BaseApiController;
 use Illuminate\Http\Request;
-use App\Http\Requests\Api\AddCoinRequest;
-use App\Http\Requests\Api\AddVoteRequest;
+use App\Http\Requests\Api\UpdateUserRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
-use App\Models\Coin;
-use App\Models\Vote;
 use App\Traits\UploadFileHelper;
 use Carbon\Carbon;
 
@@ -62,6 +59,17 @@ class UserController extends BaseApiController
             $data->roles()->sync($request->roles);
         }
 
+        $data->saveOrFail();
+        $data->refresh();
+        $data->load('roles');
+        return $this->successResponse($data);
+    }
+    public function updateData(UpdateUserRequest $request, $id)
+    {
+        $data = User::find($id);
+        $data->name = $request->name;
+        $data->password = Hash::make($request->password_new);
+        $data->email = $request->email;
         $data->saveOrFail();
         $data->refresh();
         $data->load('roles');
