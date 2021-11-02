@@ -286,6 +286,9 @@ export default {
                     this.filterData.data.splice(this.itemToChange,1,response.data.data)
                     this.showToast('User Updated')
                     window.location.href="#"
+                    if(this.userItem.id == this.$page.props.user.id){
+                        window.location.href = route('login')
+                    }
                 }else{
                     this.showToast(response.data.message)
                 }

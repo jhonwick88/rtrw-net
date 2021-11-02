@@ -240,8 +240,11 @@ export default {
                 this.isloader = false
                  if(response.data.code == 0){
                      this.showToast('Create user success')
-                     this.newCustomer = {}
+                     this.newCustomer = {
+                          members:[]
+                     }
                      this.members = []
+                     this.$page.props.customers.push(response.data.data)
                  }else{
                      this.showToast(response.data.message)
                  }

@@ -15,6 +15,7 @@ class CustomerMember extends Model
         'customer_id',
         'note',
     ];
+
     public function customer()
     {
         return $this->belongsTo(Customer::class);
