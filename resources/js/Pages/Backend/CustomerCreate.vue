@@ -69,6 +69,9 @@
        </select>
     </td>
   </tr>
+   <tr>
+    <td class="align-middle">Diskon</td><td><input class="form-control" type="number" v-model="newCustomer.discount"></td>
+  </tr>
 </tbody></table>
 <!-- tabel member -->
 <div class="card mr-t-10" v-if="members.length>0">
@@ -120,7 +123,12 @@
    <tbody><tr>
     <td colspan="2">
     <p style="padding:0px 5px;">
-    Semua wajib diisi.<br>
+    - Telp gunakan kode negara dulu contoh 62XXX XXX XXX tanpa + di awal<br>
+    - Jika koneksi lan, maka port tidak perlu di isi
+    <br>
+    - Parent tidak perlu di isi jika tidak punya
+    <br>
+    - Gunakan diskon untuk memotong biaya dari Kecepatan yang di pilih
     </p>
     </td>
   </tr>
@@ -204,7 +212,7 @@ export default {
         return networks
     },
     tambahAnggota(){
-        if(this.userItem.name.length > 4 && this.userItem.password.length > 4){
+        if(this.userItem.name.length > 2 && this.userItem.password.length > 2){
             this.members.push(this.userItem)
             this.userItem = {
                 name:'',
@@ -212,7 +220,7 @@ export default {
                 extra_price: 0,
                 note:''}
         }else{
-            this.showToast('Nama & Password harus lebih dari 4 karakter')
+            this.showToast('Nama & Password harus lebih dari 2 karakter')
         }
     },
     removeMember(index){
