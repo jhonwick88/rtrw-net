@@ -59,7 +59,7 @@
 </div>
 <!-- end header table -->
 <!-- start table -->
-		  <div class="overflow mr-t-10 box-bordered" style="max-height: 75vh" v-if="$page.props.customer.network_type == 'VOUCHER'">
+		  <div class="overflow mr-t-10 box-bordered" style="max-height: 65vh" v-if="$page.props.customer.network_type == 'VOUCHER'">
 			<table class="table table-bordered table-hover text-nowrap">
 				<thead class="thead-light">
 				<tr>
