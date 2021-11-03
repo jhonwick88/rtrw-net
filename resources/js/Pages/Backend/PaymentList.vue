@@ -65,7 +65,7 @@
 </div>
 <!-- end header table -->
 <!-- start table -->
-		  <div class="overflow mr-t-10 box-bordered" style="max-height: 75vh">
+		  <div class="overflow mr-t-10 box-bordered" style="max-height: 65vh">
 			<table class="table table-bordered table-hover text-nowrap">
 				<thead class="thead-light">
 				<tr>
