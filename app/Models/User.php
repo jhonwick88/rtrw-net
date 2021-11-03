@@ -40,7 +40,6 @@ class User extends Authenticatable
         'two_factor_recovery_codes',
         'two_factor_secret',
     ];
-    protected $dateFormat = 'U';
     /**
      * The attributes that should be cast to native types.
      *
