@@ -13,6 +13,7 @@ class NetworkController extends BaseApiController
 
     public function index(Request $request)
     {
+
         $query = $this->baseQuery($request);
         $perPage = 10;
         if ($request->has('limit')) {
