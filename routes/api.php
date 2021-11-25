@@ -54,9 +54,16 @@ Route::group(['middleware'=>['auth:sanctum'],'namespace' => 'Api'], function () 
     //Network
     Route::group(['prefix' => 'network'], function () {
         Route::get('index','NetworkController@index')->name('api.network.index');
-        Route::post('store','NetworkController@store')->name('api.network.store')->withoutMiddleware('auth:sanctum');
+        Route::post('store','NetworkController@store')->name('api.network.store');
         Route::put('update/{id}','NetworkController@update')->name('api.network.update');
         Route::delete('destroy/{id}','NetworkController@destroy')->name('api.network.destroy');
+    });
+        //Note
+    Route::group(['prefix' => 'note'], function () {
+        Route::get('index','NotesController@index')->name('api.note.index');
+        Route::post('store','NotesController@store')->name('api.note.store');
+        Route::put('update/{id}','NotesController@update')->name('api.noteupdate');
+        Route::delete('destroy/{id}','NotesController@destroy')->name('api.note.destroy');
     });
     //Payment
     Route::group(['prefix' => 'payment'], function () {
