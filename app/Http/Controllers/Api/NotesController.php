@@ -31,6 +31,7 @@ class NotesController extends BaseApiController
     {
         $data = new Note();
         $data->name = $request->name;
+        $data->isdone = $request->isdone?? 0;
         $data->description = $request->description ?? "";
         $data->saveOrFail();
 
@@ -41,6 +42,7 @@ class NotesController extends BaseApiController
     {
         $data = Note::find($id);
         $data->name = $request->name;
+        $data->isdone = $request->isdone?? 0;
         $data->description = $request->description ?? "";
 
         $data->saveOrFail();

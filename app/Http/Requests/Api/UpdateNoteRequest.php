@@ -37,6 +37,7 @@ class UpdateNoteRequest extends FormRequest
         return [
             'name' => 'sometimes',
             'description' => 'sometimes',
+            'isdone' => 'sometimes',
         ];
     }
 }

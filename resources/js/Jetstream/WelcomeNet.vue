@@ -175,7 +175,10 @@
                   <h3><a href="/admin" title="Open Catatan"><i class="fa fa-align-justify"></i> Catatan</a></h3></div>
                     <div class="card-body">
                       <div style="padding: 5px; height: 200px ;" class="mr-t-10 overflow">
-
+                          <template v-if="filterData.data.length > 0">
+                       <div class="card pd-10" v-for="(item,index) in filterData.data" :key="index">{{ `${index+1}. ${item.name}`}}
+                           </div>
+                          </template>
                     </div>
                   </div>
                 </div>
@@ -188,6 +191,6 @@
 </template>
 <script>
 export default {
-     props: ['currentTime','datarekap'],
+     props: ['currentTime','datarekap','filterData'],
 }
 </script>

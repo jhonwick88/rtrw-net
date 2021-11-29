@@ -37,6 +37,7 @@ class AddNoteRequest extends FormRequest
         return [
             'name' => 'required',
             'description' => 'sometimes',
+            'isdone' => 'sometimes',
         ];
     }
 }
