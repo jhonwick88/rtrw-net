@@ -136,6 +136,14 @@ export default{
             }
             });
     },
+    getNotes(page = 1){
+        return axios.get(`${baseUrl}/note/index`, {
+            params:{
+                page: page,
+                limit: 20,
+            }
+            });
+    },
     getSearchPaymentMethods(query){
         return axios.get(`${baseUrl}/payment-method/index`, {
             params:{

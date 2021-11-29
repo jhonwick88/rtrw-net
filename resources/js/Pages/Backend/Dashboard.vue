@@ -1,7 +1,7 @@
 <template>
     <app-layout :title="$page.props.appname" :isloader="isloading">
          <template v-slot="{ setting,currentTime }">
-                <welcome :setting="setting" :currentTime="currentTime" :datarekap="datarekap"/>
+                <welcome :setting="setting" :currentTime="currentTime" :datarekap="datarekap" :filterData="filterData"/>
          </template>
     </app-layout>
 </template>
@@ -23,16 +23,21 @@ import ApiManager from '../API/ApiManager'
                     tot_server: 0,
                     tot_jaringan: 0
                 },
+                filterData: {
+                    data: [],
+                },
                 isloading:false,
+                load:false
             }
         },
-        created() {
-            this.getDataRekap()
+        async created() {
+            await this.getDataRekap();
+            await this.getNotes();
         },
         methods: {
-            getDataRekap(){
+            async getDataRekap(){
             this.isloading = true
-            ApiManager.getDashboard()
+            await ApiManager.getDashboard()
                 .then((response) => {
                     this.isloading = false
                     this.datarekap = response.data.data
@@ -40,6 +45,14 @@ import ApiManager from '../API/ApiManager'
                 .catch((error) => {
                     console.log(error);
                 });
+            },
+            async getNotes(){
+                this.load = true
+                await ApiManager.getNotes(1).then((response) =>{
+                    this.load = false
+                    this.filterData = response.data.data;
+                    console.log(JSON.stringify(this.filterData))
+                }).catch((error)=>{console.log(error);})
             }
         }
     }
